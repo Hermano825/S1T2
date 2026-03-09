@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arritmias Cardíacas no ECG — Guia de Estudos</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, 'Times New Roman', serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #0c1445 0%, #1e3a8a 50%, #0369a1 100%); padding: 28px 32px 20px; border-bottom: 1px solid rgba(99,179,237,0.2); }
+  .header-inner { max-width: 1100px; margin: 0 auto; }
+  .header h1 { font-size: 22px; font-weight: 700; color: #bfdbfe; letter-spacing: 0.5px; display: flex; align-items: center; gap: 12px; }
+  .header p { color: #7dd3fc; font-size: 13px; font-style: italic; margin-top: 6px; }
+
+  /* NAV */
+  .nav { background: #111827; border-bottom: 1px solid #1e3a5f; padding: 0 32px; overflow-x: auto; }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 0; }
+  .nav-btn { padding: 14px 18px; background: none; border: none; border-bottom: 3px solid transparent; color: #64748b; cursor: pointer; font-family: Georgia, serif; font-size: 13px; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .nav-btn:hover { color: #94a3b8; }
+  .nav-btn.active { font-weight: 700; }
+
+  /* MAIN */
+  .main { max-width: 1100px; margin: 0 auto; padding: 32px; }
+
+  /* TEORIA CARDS */
+  .teoria-card { background: #1e293b; border-radius: 14px; padding: 24px 28px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; margin-bottom: 20px; }
+  .teoria-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 4px 0 0 4px; }
+  .teoria-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .teoria-card p { color: #cbd5e1; line-height: 1.8; font-size: 14px; margin-bottom: 12px; }
+  .teoria-card .lista-item { background: #0f172a; border-radius: 8px; padding: 10px 14px; color: #94a3b8; font-size: 13px; line-height: 1.6; margin-bottom: 8px; }
+  .destaque { border-radius: 8px; padding: 10px 16px; font-weight: 700; font-size: 13px; margin-top: 8px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 12px 16px; text-align: left; color: #93c5fd; font-weight: 700; border-bottom: 2px solid #334155; background: #1e3a5f; white-space: nowrap; }
+  td { padding: 12px 16px; border-bottom: 1px solid #1e293b; }
+  tr:nth-child(even) { background: #111827; }
+  tr:nth-child(odd) { background: #0f172a; }
+  .badge { background: #1e293b; color: #93c5fd; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-style: italic; white-space: nowrap; }
+
+  /* QUIZ */
+  .quiz-progress-bar-bg { background: #1e293b; border-radius: 4px; height: 6px; margin-bottom: 28px; }
+  .quiz-progress-bar { background: #3b82f6; height: 100%; border-radius: 4px; transition: width 0.4s; }
+  .quiz-card { background: #1e293b; border-radius: 16px; padding: 28px 32px; border: 1px solid #334155; margin-bottom: 24px; }
+  .quiz-tag { background: #1e3a8a; color: #93c5fd; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 700; letter-spacing: 1px; display: inline-block; margin-bottom: 16px; }
+  .quiz-question { font-size: 16px; line-height: 1.7; color: #e2e8f0; margin-bottom: 28px; }
+  .quiz-option { display: block; width: 100%; background: #0f172a; border: 2px solid #334155; border-radius: 10px; padding: 14px 18px; color: #cbd5e1; text-align: left; cursor: pointer; font-family: Georgia, serif; font-size: 14px; line-height: 1.5; transition: all 0.2s; margin-bottom: 12px; }
+  .quiz-option:hover:not(:disabled) { border-color: #475569; color: #e2e8f0; }
+  .quiz-option.correct { background: #052e16; border-color: #22c55e; color: #86efac; }
+  .quiz-option.wrong { background: #2d1515; border-color: #ef4444; color: #fca5a5; }
+  .quiz-option:disabled { cursor: default; }
+  .explanation { background: #0c1a2e; border: 1px solid #1e40af; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+  .explanation h4 { color: #60a5fa; margin-bottom: 10px; font-size: 14px; }
+  .explanation p { color: #bfdbfe; line-height: 1.8; font-size: 14px; }
+  .btn { background: #1d4ed8; color: white; border: none; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif; font-size: 14px; font-weight: 700; }
+  .btn:hover { background: #1e40af; }
+  .btn-secondary { background: #334155; }
+  .btn-secondary:hover { background: #475569; }
+
+  /* RESULT */
+  .result-box { text-align: center; padding: 48px 24px; }
+  .result-score { font-size: 24px; font-weight: 700; }
+  .result-msg { background: #1e293b; border-radius: 12px; padding: 24px; max-width: 500px; margin: 0 auto 24px; }
+
+  /* CRITERIOS */
+  .criterios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 24px; }
+  .criterio-card { background: #1e293b; border-radius: 12px; padding: 20px; }
+  .criterio-card h4 { margin-bottom: 14px; font-size: 15px; }
+  .criterio-card p { color: #94a3b8; font-size: 13px; line-height: 1.5; margin-bottom: 6px; }
+
+  /* MODULE HEADER */
+  .module-header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .module-header h2 { font-size: 22px; }
+  .module-header p { color: #475569; font-size: 13px; }
+
+  /* SECTION hidden/visible */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  footer { border-top: 1px solid #1e293b; padding: 16px 32px; text-align: center; color: #334155; font-size: 12px; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <h1><span>🫀</span> Arritmias Cardíacas no ECG</h1>
+    <p>Guia completo de estudo · Dra. Helena Brasil · Cardiologia & Arritmologia</p>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showModule('intro')" id="btn-intro" style="border-bottom-color:#0ea5e9;color:#0ea5e9;">⚡ Conceitos Fundamentais</button>
+    <button class="nav-btn" onclick="showModule('estreito')" id="btn-estreito">📈 QRS Estreito</button>
+    <button class="nav-btn" onclick="showModule('largo')" id="btn-largo">⚠️ QRS Largo</button>
+    <button class="nav-btn" onclick="showModule('conduta')" id="btn-conduta">🏥 Abordagem Clínica</button>
+    <button class="nav-btn" onclick="showModule('resumo')" id="btn-resumo">📋 Tabela Resumo</button>
+    <button class="nav-btn" onclick="showModule('quiz')" id="btn-quiz">🧠 Quiz (10 questões)</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ===== INTRO ===== -->
+  <div id="section-intro" class="section active">
+    <div class="module-header">
+      <span style="font-size:32px">⚡</span>
+      <div><h2 style="color:#0ea5e9">Conceitos Fundamentais</h2><p>Base do ECG e algoritmo de análise</p></div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#0ea5e930">
+      <div class="teoria-card" style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#0ea5e9;border-radius:4px 0 0 4px;padding:0;margin:0"></div>
+      <h3 style="color:#0ea5e9">O que é Taquicardia?</h3>
+      <p>Taquicardia é definida como frequência cardíaca acima de <strong>100 bpm</strong>. Pode ser fisiológica (exercício, emoção, febre) ou patológica. Nem toda taquicardia é emergência — o ECG é a ferramenta central para classificação e conduta.</p>
+      <div class="destaque" style="background:#0ea5e915;border:1px solid #0ea5e940;color:#0ea5e9">🎯 O ECG é a ferramenta central de classificação.</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#0ea5e930">
+      <h3 style="color:#0ea5e9">Algoritmo de Análise do ECG — 4 Passos Obrigatórios</h3>
+      <div class="lista-item">1️⃣ <strong>FREQUÊNCIA:</strong> Calcule a FC. Método: 1500 ÷ nº de quadradinhos entre dois picos R. Alternativa: conte os QRS em 10 segundos × 6.</div>
+      <div class="lista-item">2️⃣ <strong>QRS ESTREITO ou LARGO?</strong> Estreito (&lt;120ms = 3 quadradinhos) → origem supraventricular. Largo (&gt;120ms) → origem ventricular ou aberrância.</div>
+      <div class="lista-item">3️⃣ <strong>RITMO REGULAR ou IRREGULAR?</strong> Regular = intervalos RR constantes (variação ≤10%). Irregular = distâncias RR variáveis.</div>
+      <div class="lista-item">4️⃣ <strong>ONDA P:</strong> Presente? Morfologia sinusal ou atípica? Relação com QRS? RP' curto (&lt;1/2 do RR) ou RP' longo (&gt;1/2 do RR)?</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#0ea5e930">
+      <h3 style="color:#0ea5e9">Regra de Ouro — RP' Curto vs Longo</h3>
+      <p><strong>RP' curto</strong> (PR &gt; RP'): A onda P' está próxima do QRS seguinte → reentrada nodal (TRN típica).</p>
+      <p><strong>RP' longo</strong> (PR &lt; RP'): A onda P' está mais próxima do QRS anterior → TRAV ortodrômica, Taquicardia Atrial ou TRN atípica.</p>
+      <div class="destaque" style="background:#0ea5e915;border:1px solid #0ea5e940;color:#0ea5e9">🎯 RP' &lt; 80ms = TRN típica. RP' &gt; 80ms = TRAV ou Taquicardia Atrial.</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#0ea5e930">
+      <h3 style="color:#0ea5e9">Revisão: ECG Normal</h3>
+      <p>Impulso gerado no <strong>nó sinusal</strong> → átrios (onda P) → nó AV (pausa fisiológica, segmento PR) → feixe de His → ramos → Purkinje → ventrículos (QRS). Qualquer origem <strong>acima do feixe de His</strong> → QRS estreito. Abaixo ou com condução anormal → QRS largo.</p>
+    </div>
+  </div>
+
+  <!-- ===== QRS ESTREITO ===== -->
+  <div id="section-estreito" class="section">
+    <div class="module-header">
+      <span style="font-size:32px">📈</span>
+      <div><h2 style="color:#10b981">Taquicardias de QRS Estreito</h2><p>Origem supraventricular · QRS &lt; 120ms</p></div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#10b98130">
+      <h3 style="color:#10b981">Taquicardia Sinusal</h3>
+      <p>FC geralmente &lt; 150 bpm. Onda P sinusal positiva em DII, DIII, aVF antes de cada QRS. Ritmo regular. A <strong>causa deve ser sempre investigada</strong>: dor, febre, ansiedade, anemia, hipovolemia, TEP, hipertireoidismo.</p>
+      <div class="destaque" style="background:#10b98115;border:1px solid #10b98140;color:#10b981">🎯 Trate a causa — não a taquicardia!</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#10b98130">
+      <h3 style="color:#10b981">Taquicardia Atrial (TA)</h3>
+      <p>Foco ectópico atrial fora do nó sinusal. FC &gt; 100 bpm, regular, relação P:QRS 1:1. Onda P presente, mas com <strong>morfologia diferente da sinusal</strong> (negativa em DII, eixo incomum). Mais comum em crianças (hiperautomatismo). Diagnóstico: RP' longo.</p>
+    </div>
+
+    <div class="teoria-card" style="border-color:#10b98130">
+      <h3 style="color:#10b981">Taquicardia Atrial Multifocal (TAM)</h3>
+      <p>Ao menos <strong>3 morfologias diferentes de onda P</strong> no mesmo traçado. FC &gt; 100 bpm, ritmo <strong>IRREGULAR</strong>, intervalo PR variável. Linha de base isoelétrica entre as ondas P (diferencia de FA). Clássica em <strong>DPOC</strong>, cor pulmonale, hipóxia.</p>
+      <div class="destaque" style="background:#10b98115;border:1px solid #10b98140;color:#10b981">🎯 TAM ≠ FA: na TAM há linha isoelétrica entre as ondas P.</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#10b98130">
+      <h3 style="color:#10b981">TPSV — Taquicardia Paroxística Supraventricular</h3>
+      <p>Início e término <strong>súbitos</strong> ('liga e desliga'). QRS estreito. Ritmo regular. Onda P ausente ou retrógrada (embutida no QRS ou logo após). RP' curto (&lt;80ms na TRN típica). FC tipicamente entre 150–250 bpm.</p>
+    </div>
+
+    <div class="teoria-card" style="border-color:#10b98130">
+      <h3 style="color:#10b981">TRN — Taquicardia por Reentrada Nodal</h3>
+      <p><strong>Causa mais comum de TPSV regular</strong> em adultos (predomina em mulheres jovens). O nó AV possui via rápida (condução rápida, refratariedade longa) e via lenta (condução lenta, refratariedade curta). Uma extrassístole atrial encontra a via rápida refratária → desce pela via lenta → sobe pela via rápida → circuito fechado = reentrada sustentada.</p>
+      <p><strong>ECG:</strong> RP' &lt; 80ms, P' oculta no QRS ou causando <strong>pseudo-R' em V1</strong> e pseudo-S em DII/III/aVF.</p>
+      <div class="destaque" style="background:#10b98115;border:1px solid #10b98140;color:#10b981">🎯 TRN = causa nº1 de TPSV. Busque pseudo-R' em V1!</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#10b98130">
+      <h3 style="color:#10b981">TRAV — Taquicardia por Reentrada Atrioventricular</h3>
+      <p>Existe <strong>via acessória</strong> (feixe de Kent) conectando átrio e ventrículo fora do nó AV.</p>
+      <div class="lista-item"><strong>Ortodrômica</strong> (desce pelo nó AV, sobe pela via acessória) → QRS estreito, RP' longo (&gt;80ms), P' retrógrada após QRS.</div>
+      <div class="lista-item"><strong>Antidrômica</strong> (desce pela via acessória, sobe pelo nó AV) → QRS largo com onda delta, P' raramente visível.</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#10b98130">
+      <h3 style="color:#10b981">Pré-excitação e Síndrome de WPW</h3>
+      <p>No ritmo sinusal: <strong>PR curto + onda delta</strong> (empastamento inicial do QRS) + QRS largo + alteração de repolarização.</p>
+      <p>Na <strong>FA + WPW: EMERGÊNCIA!</strong> Ritmo irregular + QRS largo + FC muito alta → risco de FV. CONTRAINDICADOS: adenosina, beta-bloqueadores, bloqueadores de canal de cálcio (verapamil, diltiazem)!</p>
+      <div class="destaque" style="background:#10b98115;border:1px solid #10b98140;color:#10b981">🎯 FA + WPW: use procainamida ou cardioversão elétrica. NUNCA adenosina!</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#10b98130">
+      <h3 style="color:#10b981">Flutter Atrial</h3>
+      <p>Macro-reentrada no átrio direito (típico: istmo cavotricuspídeo). Frequência atrial <strong>~300 bpm</strong>. Padrão em <strong>'dente de serra'</strong> nas derivações inferiores (ondas F negativas em DII, DIII, aVF). Condução 2:1 → FC ~150 bpm (mais comum). Pode ser 3:1, 4:1.</p>
+      <div class="destaque" style="background:#10b98115;border:1px solid #10b98140;color:#10b981">🎯 FC ≈ 150 bpm? Pense em Flutter 2:1 e procure as ondas F!</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#10b98130">
+      <h3 style="color:#10b981">Fibrilação Atrial (FA)</h3>
+      <p>Arritmia sustentada mais prevalente no mundo. Atividade atrial completamente caótica (400–600 despolarizações/min). ECG: <strong>ausência de ondas P definidas</strong>, ondas f de fibrilação (linha de base irregular e caótica), <strong>ritmo ventricular irregularmente irregular</strong>. QRS estreito (salvo bloqueio de ramo ou via acessória).</p>
+      <div class="destaque" style="background:#10b98115;border:1px solid #10b98140;color:#10b981">🎯 Ritmo irregularmente irregular = FA até prova em contrário.</div>
+    </div>
+  </div>
+
+  <!-- ===== QRS LARGO ===== -->
+  <div id="section-largo" class="section">
+    <div class="module-header">
+      <span style="font-size:32px">⚠️</span>
+      <div><h2 style="color:#ef4444">Taquicardias de QRS Largo</h2><p>QRS &gt; 120ms · TV até prova em contrário</p></div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#ef444430">
+      <h3 style="color:#ef4444">Abordagem Inicial: QRS Largo</h3>
+      <p>QRS largo tem 3 causas principais:</p>
+      <div class="lista-item"><strong>(A) Taquicardia Ventricular (TV)</strong> — 80% dos casos</div>
+      <div class="lista-item"><strong>(B) TSV com aberrância</strong> — bloqueio de ramo funcional ou preexistente</div>
+      <div class="lista-item"><strong>(C) TSV com via acessória</strong> — TRAV antidrômica, FA+WPW</div>
+      <div class="destaque" style="background:#ef444415;border:1px solid #ef444440;color:#ef4444">🎯 TV até prova em contrário! Se em dúvida: trate como TV — é mais seguro.</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#ef444430">
+      <h3 style="color:#ef4444">TV Monomórfica</h3>
+      <p>Origem em foco ventricular único → QRS largo e de <strong>morfologia constante</strong>. Ritmo regular. FC 100–250 bpm. QRS geralmente &gt; 140ms.</p>
+      <p><strong>Achados que confirmam TV:</strong></p>
+      <div class="lista-item"><strong>Dissociação AV</strong> (ondas P independentes dos QRS — PATOGNOMÔNICO!)</div>
+      <div class="lista-item"><strong>Batimentos de fusão</strong> — QRS intermediário entre sinusal e ventricular</div>
+      <div class="lista-item"><strong>Batimentos de captura</strong> — QRS sinusal entre os QRS largos</div>
+      <div class="lista-item"><strong>Concordância precordial</strong> — todos os QRS positivos (V1-V6) ou todos negativos</div>
+      <div class="destaque" style="background:#ef444415;border:1px solid #ef444440;color:#ef4444">🎯 Dissociação AV = TV com certeza!</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#ef444430">
+      <h3 style="color:#ef4444">Critérios de Brugada — 4 Passos Sequenciais</h3>
+      <div class="lista-item"><strong>Passo 1:</strong> Ausência de complexo RS em TODAS as derivações precordiais? SIM → TV.</div>
+      <div class="lista-item"><strong>Passo 2:</strong> Intervalo RS &gt; 100ms em alguma precordial? SIM → TV.</div>
+      <div class="lista-item"><strong>Passo 3:</strong> Dissociação AV presente? SIM → TV.</div>
+      <div class="lista-item"><strong>Passo 4:</strong> Morfologia típica de TV (critérios em V1 e V6)? SIM → TV.</div>
+      <div class="lista-item" style="background:#1e293b">Se todos os passos NÃO → TSV com aberrância.</div>
+      <div class="destaque" style="background:#ef444415;border:1px solid #ef444440;color:#ef4444">🎯 Sensibilidade: 98,7% | Especificidade: 96,5%</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#ef444430">
+      <h3 style="color:#ef4444">Critério de Pava (DII)</h3>
+      <p>Mede o tempo até o <strong>pico da onda R em DII</strong>. Se R inicial em DII ≥ 40ms → TV. Simples e rápido de aplicar à beira do leito.</p>
+    </div>
+
+    <div class="teoria-card" style="border-color:#ef444430">
+      <h3 style="color:#ef4444">Critério de Vereckei (aVR)</h3>
+      <p>Analisa apenas a derivação <strong>aVR</strong>:</p>
+      <div class="lista-item">1. R inicial em aVR → TV</div>
+      <div class="lista-item">2. Onda r ou q inicial &gt; 40ms → TV</div>
+      <div class="lista-item">3. Entalhe na porção descendente do QRS predominantemente negativo → TV</div>
+      <div class="lista-item">4. Vi/Vt ≤ 1 (velocidade inicial menor que terminal) → TV</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#ef444430">
+      <h3 style="color:#ef4444">TV Polimórfica / Torsades de Pointes</h3>
+      <p>QRS largo com <strong>morfologia variável</strong> — o eixo 'gira' ao redor da linha de base ('torção das pontas'). Frequentemente autolimitada, mas pode degenerar em FV. Associada a <strong>QT longo</strong> (congênito ou adquirido: drogas, hipocalemia, hipomagnesemia). Padrão: ciclo curto-longo-curto precedendo o início.</p>
+      <div class="lista-item"><strong>Tratamento:</strong> Sulfato de Magnésio IV 2g + correção de eletrólitos + retirar droga causadora</div>
+      <div class="destaque" style="background:#ef444415;border:1px solid #ef444440;color:#ef4444">🎯 QT longo + taquicardia polimórfica = Torsades! Mg IV! Amiodarona é CONTRAINDICADA!</div>
+    </div>
+  </div>
+
+  <!-- ===== CONDUTA ===== -->
+  <div id="section-conduta" class="section">
+    <div class="module-header">
+      <span style="font-size:32px">🏥</span>
+      <div><h2 style="color:#8b5cf6">Abordagem Clínica</h2><p>Conduta prática e farmacologia</p></div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#8b5cf630">
+      <h3 style="color:#8b5cf6">Estável vs Instável — A Primeira Decisão</h3>
+      <p>Todo paciente com taquicardia deve ser avaliado quanto à estabilidade hemodinâmica ANTES de qualquer outra conduta.</p>
+      <div class="lista-item"><strong>🔴 INSTÁVEL:</strong> hipotensão (PA &lt; 90/60), rebaixamento de consciência, dor torácica anginosa, sinais de choque, edema agudo de pulmão → <strong>Cardioversão elétrica sincronizada IMEDIATA.</strong></div>
+      <div class="lista-item"><strong>🟢 ESTÁVEL:</strong> paciente mantém perfusão adequada → há tempo para análise do ECG e conduta farmacológica.</div>
+      <div class="destaque" style="background:#8b5cf615;border:1px solid #8b5cf640;color:#8b5cf6">🎯 Instabilidade hemodinâmica = cardioversão elétrica imediata (com sedação)!</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#8b5cf630">
+      <h3 style="color:#8b5cf6">Manobras Vagais (TSV estável)</h3>
+      <p>Primeira linha em TSV estável com QRS estreito. Aumentam o tônus vagal → bloqueio transitório do nó AV → pode reverter reentrada nodal.</p>
+      <div class="lista-item"><strong>Manobra de Valsalva:</strong> expiração forçada com glote fechada, 15 segundos. Taxa de reversão: ~20%.</div>
+      <div class="lista-item"><strong>Valsalva Modificada:</strong> + decúbito dorsal com elevação passiva das pernas após Valsalva. Taxa de reversão: até 43%.</div>
+      <div class="lista-item"><strong>Massagem do seio carotídeo:</strong> evitar em idosos com sopro carotídeo.</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#8b5cf630">
+      <h3 style="color:#8b5cf6">Adenosina — Droga do Nó AV</h3>
+      <p><strong>Droga de escolha para TSV</strong> com QRS estreito. Mecanismo: bloqueia temporariamente a condução pelo nó AV (agonista A1 → hiperpolarização por abertura de canais K+).</p>
+      <div class="lista-item"><strong>Dose:</strong> 6mg IV em bolus rápido + flush 20mL SF. Se sem resposta em 1–2 min: 12mg. Pode repetir 12mg.</div>
+      <div class="lista-item"><strong>Efeitos adversos</strong> (transitórios, &lt;30s): rubor, dispneia, dor torácica.</div>
+      <div class="lista-item"><strong>Contraindicações:</strong> asma grave, bloqueio AV avançado, WPW+FA.</div>
+      <div class="lista-item"><strong>Uso diagnóstico:</strong> pode revelar Flutter atrial ao desmascarar ondas F.</div>
+      <div class="destaque" style="background:#8b5cf615;border:1px solid #8b5cf640;color:#8b5cf6">🎯 Na WPW com FA: NUNCA adenosina! Pode precipitar FV.</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#8b5cf630">
+      <h3 style="color:#8b5cf6">Amiodarona</h3>
+      <p>Antiarrítmico de <strong>amplo espectro</strong> (classe III — bloqueia canais K+, Na+, Ca2+ e receptores adrenérgicos). Indicada em: TV sustentada estável, FA com alta resposta ventricular em cardiopata, TPSV refratária.</p>
+      <div class="lista-item"><strong>Dose IV:</strong> 150–300mg em 10–20 min, seguido de infusão de manutenção (1mg/min por 6h, depois 0,5mg/min).</div>
+      <div class="lista-item"><strong>Efeitos agudos:</strong> hipotensão (infundir lentamente), bradicardia, flebite.</div>
+      <div class="lista-item"><strong>Uso crônico:</strong> disfunção tireoidiana (hipo e hiper), pneumonite, hepatotoxicidade, fotossensibilidade, microdepósitos corneanos.</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#8b5cf630">
+      <h3 style="color:#8b5cf6">Cardioversão Elétrica Sincronizada</h3>
+      <p>Indicada em qualquer taquicardia com <strong>instabilidade hemodinâmica</strong>; FA/Flutter eletivos. O choque é sincronizado com o QRS (evita FV). Requer <strong>sedação/analgesia prévia</strong> no paciente consciente.</p>
+      <div class="lista-item"><strong>FA:</strong> 120–200J bifásico</div>
+      <div class="lista-item"><strong>Flutter:</strong> 50–100J</div>
+      <div class="lista-item"><strong>TSV:</strong> 50–100J</div>
+      <div class="lista-item"><strong>TV com pulso:</strong> 100–200J</div>
+    </div>
+
+    <div class="teoria-card" style="border-color:#8b5cf630">
+      <h3 style="color:#8b5cf6">Torsades de Pointes — Protocolo</h3>
+      <div class="lista-item">1. Sulfato de Magnésio <strong>2g IV em 1–2 min</strong> (mesmo com Mg sérico normal!)</div>
+      <div class="lista-item">2. Corrigir hipocalemia (manter K+ &gt; 4,5 mEq/L)</div>
+      <div class="lista-item">3. Identificar e <strong>suspender drogas que prolongam QT</strong> (antipsicóticos, quinolonas, macrolídeos, antifúngicos azólicos, antiarrítmicos classe IA e III)</div>
+      <div class="lista-item">4. Overdrive pacing (estimulação temporária FC &gt; 100 bpm) para encurtar QT</div>
+      <div class="lista-item">5. Isoproterenol IV (formas bradicardia-dependentes)</div>
+      <div class="lista-item">6. Cardioversão se FV ou TV polimórfica incessante</div>
+      <div class="destaque" style="background:#8b5cf615;border:1px solid #8b5cf640;color:#8b5cf6">🎯 Amiodarona é CONTRAINDICADA no Torsades — prolonga o QT!</div>
+    </div>
+  </div>
+
+  <!-- ===== RESUMO ===== -->
+  <div id="section-resumo" class="section">
+    <h2 style="color:#fcd34d;margin-bottom:24px;font-size:20px">📋 Tabela Comparativa das Arritmias</h2>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Arritmia</th><th>QRS</th><th>Ritmo</th><th>Onda P</th><th>FC (bpm)</th><th>Dica Chave</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="color:#e2e8f0;font-weight:600">Taquicardia Sinusal</td><td style="color:#34d399;font-weight:600">Estreito</td><td style="color:#94a3b8">Regular</td><td style="color:#94a3b8">Sinusal antes de cada QRS</td><td style="color:#fbbf24;font-weight:600">100–150</td><td><span class="badge">Trate a causa</span></td></tr>
+          <tr><td style="color:#e2e8f0;font-weight:600">Taquicardia Atrial</td><td style="color:#34d399;font-weight:600">Estreito</td><td style="color:#94a3b8">Regular</td><td style="color:#94a3b8">Ectópica, morfologia ≠ sinusal</td><td style="color:#fbbf24;font-weight:600">&gt;100</td><td><span class="badge">RP' longo</span></td></tr>
+          <tr><td style="color:#e2e8f0;font-weight:600">TAM</td><td style="color:#34d399;font-weight:600">Estreito</td><td style="color:#94a3b8">Irregular</td><td style="color:#94a3b8">≥3 morfologias, linha isoelétrica</td><td style="color:#fbbf24;font-weight:600">&gt;100</td><td><span class="badge">DPOC clássico</span></td></tr>
+          <tr><td style="color:#e2e8f0;font-weight:600">TRN</td><td style="color:#34d399;font-weight:600">Estreito</td><td style="color:#94a3b8">Regular</td><td style="color:#94a3b8">Pseudo-R' em V1, RP' &lt; 80ms</td><td style="color:#fbbf24;font-weight:600">150–250</td><td><span class="badge">Causa + comum de TPSV</span></td></tr>
+          <tr><td style="color:#e2e8f0;font-weight:600">TRAV Ortodrômica</td><td style="color:#34d399;font-weight:600">Estreito</td><td style="color:#94a3b8">Regular</td><td style="color:#94a3b8">Retrógrada após QRS, RP' &gt; 80ms</td><td style="color:#fbbf24;font-weight:600">150–250</td><td><span class="badge">Via acessória oculta</span></td></tr>
+          <tr><td style="color:#e2e8f0;font-weight:600">TRAV Antidrômica</td><td style="color:#f87171;font-weight:600">Largo</td><td style="color:#94a3b8">Regular</td><td style="color:#94a3b8">Raramente visível</td><td style="color:#fbbf24;font-weight:600">150–250</td><td><span class="badge">WPW manifesto</span></td></tr>
+          <tr><td style="color:#e2e8f0;font-weight:600">Flutter Atrial</td><td style="color:#34d399;font-weight:600">Estreito</td><td style="color:#94a3b8">Regular (2:1, 3:1)</td><td style="color:#94a3b8">Ondas F em dente de serra</td><td style="color:#fbbf24;font-weight:600">~150 (2:1)</td><td><span class="badge">F negativas em DII/III/aVF</span></td></tr>
+          <tr><td style="color:#e2e8f0;font-weight:600">Fibrilação Atrial</td><td style="color:#34d399;font-weight:600">Estreito</td><td style="color:#94a3b8">Irregularmente irregular</td><td style="color:#94a3b8">Ausente (ondas f caóticas)</td><td style="color:#fbbf24;font-weight:600">Variável</td><td><span class="badge">Mais comum do mundo</span></td></tr>
+          <tr><td style="color:#e2e8f0;font-weight:600">TV Monomórfica</td><td style="color:#f87171;font-weight:600">Largo</td><td style="color:#94a3b8">Regular</td><td style="color:#94a3b8">Dissociação AV</td><td style="color:#fbbf24;font-weight:600">100–250</td><td><span class="badge">80% do QRS largo</span></td></tr>
+          <tr><td style="color:#e2e8f0;font-weight:600">TV Polimórfica (Torsades)</td><td style="color:#f87171;font-weight:600">Largo variável</td><td style="color:#94a3b8">Irregular</td><td style="color:#94a3b8">Indistinguível</td><td style="color:#fbbf24;font-weight:600">200–300</td><td><span class="badge">QT longo + Mg IV</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="color:#fcd34d;margin:40px 0 20px;font-size:18px">🔑 Critérios Diagnósticos: TV vs TSV com QRS Largo</h3>
+    <div class="criterios-grid">
+      <div class="criterio-card" style="border:1px solid #ef444440">
+        <h4 style="color:#ef4444">Critério de Brugada</h4>
+        <p>• Ausência de RS em todas precordiais → TV</p>
+        <p>• RS &gt; 100ms em alguma precordial → TV</p>
+        <p>• Dissociação AV → TV</p>
+        <p>• Morfologia típica de TV → TV</p>
+        <p style="color:#fbbf24">• Todos negativos → TSV com aberrância</p>
+      </div>
+      <div class="criterio-card" style="border:1px solid #8b5cf640">
+        <h4 style="color:#8b5cf6">Critério de Pava (DII)</h4>
+        <p>• Mede tempo até pico da onda R em DII</p>
+        <p>• R inicial ≥ 40ms → TV</p>
+        <p>• Simples e rápido à beira do leito</p>
+        <p>• Útil como triagem inicial</p>
+        <p>• Combinar com Brugada para maior acurácia</p>
+      </div>
+      <div class="criterio-card" style="border:1px solid #f59e0b40">
+        <h4 style="color:#f59e0b">Critério de Vereckei (aVR)</h4>
+        <p>• R inicial em aVR → TV</p>
+        <p>• Onda r ou q &gt; 40ms → TV</p>
+        <p>• Entalhe na descida do QRS → TV</p>
+        <p>• Vi/Vt ≤ 1 → TV</p>
+        <p>• Analisa APENAS aVR — prático!</p>
+      </div>
+    </div>
+
+    <h3 style="color:#fcd34d;margin:40px 0 20px;font-size:18px">💊 Condutas Resumidas por Arritmia</h3>
+    <div class="criterios-grid">
+      <div class="criterio-card" style="border:1px solid #10b98140">
+        <h4 style="color:#10b981">TSV / TRN / TRAV Ortodrômica</h4>
+        <p>1. Manobras vagais</p>
+        <p>2. Adenosina 6mg IV bolus</p>
+        <p>3. Adenosina 12mg (se sem resposta)</p>
+        <p>4. Verapamil ou diltiazem IV (alternativa)</p>
+        <p>5. Cardioversão elétrica (se instável)</p>
+      </div>
+      <div class="criterio-card" style="border:1px solid #0ea5e940">
+        <h4 style="color:#0ea5e9">Flutter / FA (estável)</h4>
+        <p>• Controle da frequência: beta-bloq ou BCC</p>
+        <p>• Cardioversão química: amiodarona, propafenona</p>
+        <p>• Cardioversão elétrica eletiva</p>
+        <p>• Anticoagulação (CHA₂DS₂-VASc)</p>
+        <p>• Ablação por cateter (definitivo)</p>
+      </div>
+      <div class="criterio-card" style="border:1px solid #ef444440">
+        <h4 style="color:#ef4444">TV Monomórfica (estável)</h4>
+        <p>• Amiodarona IV 150mg em 10 min</p>
+        <p>• Procainamida IV (alternativa)</p>
+        <p>• Cardioversão elétrica se instável</p>
+        <p>• Investigar cardiopatia de base</p>
+        <p>• CDI (TV recorrente em cardiopata)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ ===== -->
+  <div id="section-quiz" class="section">
+    <div id="quiz-container"></div>
+  </div>
+
+</div>
+
+<footer>Guia de Estudos — Arritmias Cardíacas · Baseado em aula da Dra. Helena Brasil · Para fins educacionais</footer>
+
+<script>
+const moduleColors = {
+  intro: '#0ea5e9', estreito: '#10b981', largo: '#ef4444',
+  conduta: '#8b5cf6', resumo: '#f59e0b', quiz: '#f59e0b'
+};
+
+function showModule(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.borderBottomColor = 'transparent';
+    b.style.color = '#64748b';
+    b.style.fontWeight = '400';
+  });
+  const section = document.getElementById('section-' + id);
+  if (section) section.classList.add('active');
+  const btn = document.getElementById('btn-' + id);
+  if (btn) {
+    btn.classList.add('active');
+    btn.style.color = moduleColors[id];
+    btn.style.borderBottomColor = moduleColors[id];
+    btn.style.fontWeight = '700';
+  }
+  if (id === 'quiz') renderQuiz();
+}
+
+// ============ QUIZ ENGINE ============
+const questions = [
+  {
+    modulo: "Conceitos",
+    pergunta: "Uma paciente de 28 anos chega ao PS com palpitações de início súbito há 30 minutos. ECG: FC 180 bpm, QRS estreito, ritmo regular e ausência de ondas P visíveis. A onda P' é identificada imediatamente após o QRS com RP' < 80ms. Qual é o diagnóstico mais provável?",
+    opcoes: ["Taquicardia Sinusal", "Fibrilação Atrial", "Taquicardia por Reentrada Nodal (TRN)", "Flutter Atrial 2:1"],
+    resposta: 2,
+    explicacao: "TRN é a causa mais comum de TPSV regular em adultos jovens (especialmente mulheres). O achado de QRS estreito + ritmo regular + RP' curto (<80ms) é clássico de TRN típica. O circuito de reentrada é intranodal — a ativação atrial retrógrada é simultânea à ventricular, por isso a P' fica 'embutida' no QRS ou logo após, causando pseudo-R' em V1."
+  },
+  {
+    modulo: "QRS Estreito",
+    pergunta: "Paciente com DPOC descompensado, 65 anos, em uso de broncodilatadores. ECG: FC 115 bpm, ritmo irregular, QRS estreito. Você identifica pelo menos 4 morfologias de onda P com linha de base isoelétrica entre elas. Qual é o diagnóstico?",
+    opcoes: ["Fibrilação Atrial", "Taquicardia Atrial Multifocal", "Flutter Atrial com bloqueio variável", "Taquicardia Sinusal Irregular"],
+    resposta: 1,
+    explicacao: "Taquicardia Atrial Multifocal (TAM): ≥3 morfologias de onda P + FC >100 + ritmo irregular + linha isoelétrica entre as ondas P. O contexto (DPOC + broncodilatadores) é a pista. O diferencial com FA é a presença de linha isoelétrica entre as ondas P na TAM. Na FA, não há onda P definida e a linha de base é completamente caótica."
+  },
+  {
+    modulo: "QRS Estreito",
+    pergunta: "ECG: FC ~150 bpm, QRS estreito, ritmo regular. Nas derivações inferiores você observa ondulações rítmicas em 'dente de serra' negativas. Qual a melhor conduta para confirmar o ritmo?",
+    opcoes: ["Realizar adenosina IV para revelar o ritmo", "Cardioversão elétrica imediata", "Solicitar ecocardiograma", "Administrar amiodarona"],
+    resposta: 0,
+    explicacao: "Suspeita de Flutter Atrial 2:1 (FC ~150 = 300÷2). A adenosina bloqueia transitoriamente o nó AV, reduzindo a condução ventricular e permitindo visualizar as ondas F em 'dente de serra'. A adenosina não reverte o flutter (o circuito é atrial, não nodal), mas tem enorme valor diagnóstico. Ondas F negativas em DII/III/aVF caracterizam o flutter típico anti-horário."
+  },
+  {
+    modulo: "QRS Largo",
+    pergunta: "Homem de 58 anos, cardiopata isquêmico. ECG: FC 180 bpm, QRS largo (180ms), ritmo regular, morfologia constante. Em algumas derivações, você identifica ondas P independentes dos QRS. Qual o diagnóstico e conduta?",
+    opcoes: ["TSV com aberrância — adenosina IV", "TV monomórfica — amiodarona IV se estável", "Flutter Atrial — cardioversão", "Taquicardia Sinusal com bloqueio de ramo — observar"],
+    resposta: 1,
+    explicacao: "Dissociação AV (ondas P independentes dos QRS) é PATOGNOMÔNICA de TV. O contexto (cardiopata isquêmico + QRS >140ms + dissociação AV) confirma TV monomórfica. Se estável: amiodarona IV ou procainamida. Se instável: cardioversão elétrica sincronizada imediata. NUNCA tratar como TSV sem confirmação — adenosina pode precipitar colapso cardiovascular na TV."
+  },
+  {
+    modulo: "QRS Largo",
+    pergunta: "Paciente em uso de haloperidol e azitromicina: QTc de 560ms. Evolui com taquicardia de QRS largo, morfologia variável, eixo 'girando', FC ~250 bpm. Qual a conduta MAIS CORRETA?",
+    opcoes: ["Amiodarona IV 300mg em bolus", "Sulfato de Magnésio 2g IV + suspender drogas + corrigir eletrólitos", "Adenosina 6mg IV", "Beta-bloqueador IV"],
+    resposta: 1,
+    explicacao: "Torsades de Pointes: TV polimórfica em contexto de QT longo adquirido (haloperidol + azitromicina prolongam QT). Tratamento: (1) MgSO4 2g IV mesmo com Mg normal; (2) Suspender drogas que prolongam QT; (3) Corrigir K+ >4,5 e Mg²+. Amiodarona é CONTRAINDICADA (prolonga QT). Adenosina não tem efeito em TV. Beta-bloqueador pode agravar formas bradicardia-dependentes."
+  },
+  {
+    modulo: "Conduta",
+    pergunta: "Paciente de 35 anos com WPW conhecido desenvolve FA com FC de 220 bpm. ECG: ritmo irregular, QRS largo com onda delta. Ele está hipotenso (PA 80/50). Qual a conduta CORRETA?",
+    opcoes: ["Adenosina 6mg IV para controle da frequência", "Diltiazem IV para controle ventricular", "Cardioversão elétrica sincronizada imediata", "Beta-bloqueador IV"],
+    resposta: 2,
+    explicacao: "FA + WPW + instabilidade hemodinâmica = EMERGÊNCIA. Conduta: Cardioversão elétrica sincronizada imediata. CONTRAINDICADOS em FA+WPW: adenosina (pode precipitar FV ao forçar toda a condução pela via acessória), diltiazem, verapamil, beta-bloqueadores. Em paciente ESTÁVEL com FA+WPW: procainamida ou ibutilida IV. Definitivo: ablação por cateter da via acessória."
+  },
+  {
+    modulo: "Critérios",
+    pergunta: "Ao aplicar o Critério de Brugada em uma taquicardia de QRS largo, todos os 4 passos são negativos. O que isso significa?",
+    opcoes: ["Confirma TV com alta especificidade", "Sugere TSV com aberrância de condução", "Descarta definitivamente TV", "Indica necessidade de cardioversão imediata"],
+    resposta: 1,
+    explicacao: "No algoritmo de Brugada, se TODOS os 4 critérios forem negativos, o diagnóstico sugerido é TSV com aberrância de condução. Porém: resultado negativo em todos os passos não descarta definitivamente TV. Em caso de dúvida clínica, trate como TV. A especificidade do algoritmo completo é ~96,5%."
+  },
+  {
+    modulo: "ECG",
+    pergunta: "Qual achado de ECG é PATOGNOMÔNICO de Taquicardia Ventricular?",
+    opcoes: ["QRS > 120ms", "FC > 150 bpm", "Dissociação AV (ondas P independentes dos QRS)", "Ausência de ondas P"],
+    resposta: 2,
+    explicacao: "Dissociação AV é patognomônica de TV: os átrios e ventrículos batem de forma independente — o nó sinusal despolariza os átrios normalmente, mas os ventrículos são comandados pelo foco ventricular ectópico. Outros achados sugestivos (não patognomônicos): batimentos de fusão, batimentos de captura, QRS >140ms, concordância precordial."
+  },
+  {
+    modulo: "Farmacologia",
+    pergunta: "Paciente com TSV (TRN) estável. Manobras vagais sem sucesso. Qual é a droga de PRIMEIRA LINHA e seu mecanismo?",
+    opcoes: ["Amiodarona — bloqueia canais de K+ e Na+", "Adenosina — agonista A1, bloqueia transitoriamente o nó AV", "Metoprolol — beta-bloqueador, reduz automatismo sinusal", "Verapamil — bloqueador de canal de cálcio, lentifica condução AV"],
+    resposta: 1,
+    explicacao: "Adenosina é a droga de primeira linha para TSV. Mecanismo: agonismo nos receptores A1 do nó AV → abertura de canais de K+ (hiperpolarização) e inibição de correntes de Ca²+ → bloqueio transitório da condução AV por 10–30 segundos. Dose: 6mg IV em bolus rápido + flush 20mL. Meia-vida: ~10 segundos. Contraindicações: asma grave, bloqueio AV avançado, WPW+FA."
+  },
+  {
+    modulo: "Integração",
+    pergunta: "Homem de 72 anos hipertenso. ECG: FC 88 bpm, ritmo irregularmente irregular, sem ondas P definidas, linha de base com oscilações finas. Qual é o ritmo e o principal risco associado?",
+    opcoes: ["Flutter Atrial — risco de bloqueio AV completo", "Fibrilação Atrial — risco de tromboembolismo (AVC)", "TAM — risco de cor pulmonale", "TRN — risco de síncope"],
+    resposta: 1,
+    explicacao: "Fibrilação Atrial: ritmo irregularmente irregular + ausência de ondas P + ondas f de fibrilação + QRS estreito. O principal risco em longo prazo é o tromboembolismo: a estase no átrio esquerdo (especialmente apêndice atrial esquerdo) favorece trombos → embolia sistêmica → AVC isquêmico. O escore CHA₂DS₂-VASc guia a anticoagulação. Este paciente (homem >65 anos + HAS) tem indicação de anticoagulante oral."
+  }
+];
+
+let currentQ = 0, score = 0, selected = null, finished = false;
+
+function renderQuiz() {
+  if (finished) { renderResult(); return; }
+  const q = questions[currentQ];
+  const pct = (currentQ / questions.length) * 100;
+  let html = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <span style="color:#64748b;font-size:13px">Questão ${currentQ+1} de ${questions.length}</span>
+      <span style="color:#34d399;font-size:13px">✅ ${score} corretas</span>
+    </div>
+    <div class="quiz-progress-bar-bg"><div class="quiz-progress-bar" style="width:${pct}%"></div></div>
+    <div class="quiz-card">
+      <span class="quiz-tag">${q.modulo.toUpperCase()}</span>
+      <p class="quiz-question">${q.pergunta}</p>
+      <div id="options">`;
+  q.opcoes.forEach((op, i) => {
+    html += `<button class="quiz-option" id="opt-${i}" onclick="answer(${i})"><strong>${String.fromCharCode(65+i)}.</strong> ${op}</button>`;
+  });
+  html += `</div></div><div id="explanation-area"></div>
+    <div style="text-align:right;margin-top:8px">
+      <button class="btn" id="next-btn" style="display:none" onclick="nextQuestion()">
+        ${currentQ < questions.length-1 ? 'Próxima →' : 'Ver Resultado'}
+      </button>
+    </div>`;
+  document.getElementById('quiz-container').innerHTML = html;
+}
+
+function answer(idx) {
+  if (selected !== null) return;
+  selected = idx;
+  const q = questions[currentQ];
+  const isCorrect = idx === q.resposta;
+  if (isCorrect) score++;
+  q.opcoes.forEach((_, i) => {
+    const btn = document.getElementById('opt-'+i);
+    btn.disabled = true;
+    if (i === q.resposta) btn.classList.add('correct');
+    else if (i === idx && !isCorrect) btn.classList.add('wrong');
+  });
+  document.getElementById('explanation-area').innerHTML = `
+    <div class="explanation">
+      <h4>💡 Explicação Detalhada</h4>
+      <p>${q.explicacao}</p>
+    </div>`;
+  document.getElementById('next-btn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  selected = null;
+  if (currentQ < questions.length-1) {
+    currentQ++;
+    renderQuiz();
+  } else {
+    finished = true;
+    renderResult();
+  }
+}
+
+function renderResult() {
+  const pct = Math.round((score / questions.length) * 100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '📚' : '💪';
+  const msg = pct >= 80
+    ? '<p style="color:#34d399;margin:0">✅ Excelente domínio do conteúdo! Você domina arritmias.</p>'
+    : pct >= 60
+    ? '<p style="color:#fbbf24;margin:0">📖 Bom desempenho! Revise os tópicos dos erros.</p>'
+    : '<p style="color:#f87171;margin:0">🔄 Revise os módulos teóricos e tente novamente.</p>';
+  document.getElementById('quiz-container').innerHTML = `
+    <div class="result-box">
+      <div style="font-size:64px;margin-bottom:16px">${emoji}</div>
+      <h2 style="color:#bfdbfe;margin-bottom:8px;font-size:28px">Quiz Finalizado!</h2>
+      <p style="color:#94a3b8;font-size:18px;margin-bottom:24px">
+        Você acertou <strong class="result-score" style="color:${pct>=70?'#34d399':'#f87171'};font-size:28px">${score}/${questions.length}</strong> questões (${pct}%)
+      </p>
+      <div class="result-msg">${msg}</div>
+      <button class="btn" onclick="resetQuiz()">Refazer Quiz</button>
+    </div>`;
+}
+
+function resetQuiz() {
+  currentQ = 0; score = 0; selected = null; finished = false;
+  renderQuiz();
+}
+</script>
+</body>
+</html>
