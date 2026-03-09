@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub de Estudos Med</title>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --paper: #fffdf8;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e7dcc7;
+      --card-1: #fff6e9;
+      --card-2: #eef8ff;
+      --accent-1: #c2410c;
+      --accent-2: #0369a1;
+      --ok: #166534;
+      --shadow: 0 18px 40px rgba(31, 41, 55, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, #fff8ea 0%, transparent 35%),
+        radial-gradient(circle at 90% 80%, #e5f4ff 0%, transparent 28%),
+        var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: min(1050px, 92%);
+      margin: 44px auto;
+    }
+
+    .hero {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -50px;
+      top: -50px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(194,65,12,0.14), rgba(3,105,161,0.14));
+    }
+
+    .kicker {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--accent-2);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.08;
+      margin-bottom: 10px;
+      max-width: 760px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 720px;
+      line-height: 1.65;
+    }
+
+    .panel {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      padding: 22px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .18s ease, box-shadow .18s ease;
+      box-shadow: 0 8px 24px rgba(31, 41, 55, 0.05);
+      display: block;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 28px rgba(31, 41, 55, 0.12);
+    }
+
+    .card.arritmia { background: var(--card-2); }
+    .card.nefro { background: var(--card-1); }
+
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 10px;
+      margin-bottom: 12px;
+      letter-spacing: .6px;
+    }
+
+    .arritmia .badge { background: rgba(3,105,161,.12); color: var(--accent-2); }
+    .nefro .badge { background: rgba(194,65,12,.12); color: var(--accent-1); }
+
+    .card h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #4b5563;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .cta {
+      display: inline-block;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--ok);
+    }
+
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+      padding-bottom: 30px;
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding: 24px; }
+      .container { margin: 22px auto; }
+      .card h2 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <span class="kicker">Painel principal</span>
+      <h1>Hub de estudos para acesso rapido aos modulos</h1>
+      <p>Use este painel para navegar entre os conteudos. O modulo de Arritmias ja esta pronto e o modulo de Nefro (SGU) esta preparado para voce completar com seu HTML.</p>
+    </section>
+
+    <section class="panel" aria-label="Painel de modulos">
+      <a class="card arritmia" href="index.html">
+        <span class="badge">Cardiologia</span>
+        <h2>Arritmias no ECG</h2>
+        <p>Acesso direto ao conteudo completo de arritmias cardiacas com teoria, tabela e quiz.</p>
+        <span class="cta">Abrir modulo -></span>
+      </a>
+
+      <a class="card nefro" href="sgu.html">
+        <span class="badge">Nefrologia</span>
+        <h2>Nefro (SGU)</h2>
+        <p>Painel pronto para receber o novo material de SGU. Voce pode substituir o conteudo depois.</p>
+        <span class="cta">Abrir modulo -></span>
+      </a>
+    </section>
+  </main>
+
+  <div class="footer">Hub local de estudos medicos</div>
+</body>
+</html>

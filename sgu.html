@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGU - Nefrologia</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+const { useState } = React;
+
+const TEMAS = [
+  {
+    id: "investigacao",
+    titulo: "🔍 Investigando o SGU",
+    cor: "#0f4c75",
+    corClara: "#e8f4fd",
+    conteudo: [
+      {
+        subtitulo: "Abordagem inicial ao paciente renal",
+        texto: `A investigação do Sistema Gênito-Urinário (SGU) segue uma lógica fisiológica progressiva. O objetivo é identificar onde está o problema (glomérulo, túbulos, ou outras vias urinárias) usando ferramentas de baixo custo e pouco invasivas.`,
+        topicos: [
+          { nome: "História médica detalhada", desc: "Obtida antes de qualquer exame. Fornece pistas diagnósticas fundamentais. Inclui exposição a fármacos, microorganismos, distúrbios hormonais e histórico familiar." },
+          { nome: "Exame clínico minucioso", desc: "Focado no abdome e flancos. Busca identificar o local mais provável do problema fisiológico (rim, ureter, bexiga, uretra)." },
+          { nome: "Exame do sedimento urinário", desc: "Analisa características específicas: presença de hemácias (dismórficas ou não), leucócitos, cilindros, cristais e bactérias." },
+          { nome: "Urina de 24 horas", desc: "Quantifica a excreção de glicose e proteínas. Proteinúria >3,5g/dia sugere síndrome nefrótica. Avalia também bicarbonato, cálcio, creatinina e amônio." },
+          { nome: "Taxa de Filtração Glomerular (TFG)", desc: "Índice da função renal. Avalia a extensão e gravidade da doença. Calculada pela depuração de creatinina ou inulina." },
+        ],
+        destaque: { titulo: "Parâmetros urinários de referência", itens: [
+          "Bicarbonato: < 2 mmol/dia",
+          "Cálcio (adulto): 150–250 mg/dia",
+          "Creatinina: 15–25 mg/kg/dia",
+          "Excreção de amônio: 40–60 mmol/dia",
+          "Hemácia: ausente",
+          "Leucócitos: < 10.000/mL",
+          "pH: < 6,5",
+          "Proteínas: < 0,5 g/dia",
+        ]},
+      },
+      {
+        subtitulo: "Correlação entre histórico e diagnóstico",
+        texto: "A história clínica permite associar o agente causal ao distúrbio renal mais provável:",
+        topicos: [
+          { nome: "Bactérias → ITU", desc: "Infecção do trato urinário. Leucócitos na urina indicam síndrome nefrítica." },
+          { nome: "Antibióticos → IRA", desc: "Alguns antibióticos causam lesão tubular aguda (nefrotoxicidade direta)." },
+          { nome: "Cisplatina → DRC", desc: "Quimioterápico com potencial nefrotóxico cumulativo, levando à doença renal crônica." },
+          { nome: "Hiperparatireoidismo → Litíase", desc: "PTH elevado aumenta a reabsorção óssea de cálcio, levando à hipercalciúria e formação de cálculos." },
+          { nome: "Mutação gene PKHD1 → Doença renal policística", desc: "Causa doença renal policística hepatorrenal por mutação genética hereditária." },
+        ],
+      },
+      {
+        subtitulo: "Localização do problema fisiológico",
+        texto: "Com base nos achados, o problema pode ser localizado em três regiões principais:",
+        topicos: [
+          { nome: "Rim, ureteres, bexiga e uretra", desc: "→ Infecção do trato urinário (ITU)" },
+          { nome: "Glomérulo", desc: "→ Síndrome nefrítica, síndrome nefrótica, doença renal crônica" },
+          { nome: "Túbulos urinários", desc: "→ IRA, litíase renal, DRC" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "nefritica_nefrotica",
+    titulo: "🫧 Síndrome Nefrítica e Nefrótica",
+    cor: "#7b2d8b",
+    corClara: "#f5e9f8",
+    conteudo: [
+      {
+        subtitulo: "Hematúria dismórfica vs. não-dismórfica",
+        texto: "O morfotipo das hemácias urinárias é fundamental para localizar a origem do sangramento:",
+        topicos: [
+          { nome: "Hematúria dismórfica", desc: "Hemácias com formas irregulares, fragmentadas. Indica que passaram pelo glomérulo sob pressão osmótica e mecânica. Diagnóstico: Síndrome Nefrítica." },
+          { nome: "Hematúria não-dismórfica", desc: "Hemácias com morfologia preservada. Indica sangramento em vias urinárias baixas. Diagnóstico: litíase renal ou perfuração abdominal." },
+        ],
+        destaque: { titulo: "Por que as hemácias ficam dismórficas?", itens: [
+          "As hemácias passam forçosamente pela membrana basal glomerular inflamada",
+          "São expostas a variações osmóticas e de pH ao longo do néfron",
+          "Sofrem compressão mecânica nos poros fendidos dos podócitos",
+          "Resultado: células com formatos bizarros (acantócitos, esquizócitos)",
+        ]},
+      },
+      {
+        subtitulo: "Síndrome Nefrítica",
+        texto: "Inflamação do glomérulo que compromete primariamente o endotélio, a membrana basal e as células mesangiais.",
+        topicos: [
+          { nome: "Mecanismo", desc: "Inflamação imunomediada (ex: pós-estreptocócica). Leucócitos infiltram o glomérulo, danificando as barreiras de filtração." },
+          { nome: "Hematúria dismórfica", desc: "Passagem anormal de hemácias pela membrana basal danificada." },
+          { nome: "Proteinúria leve a moderada", desc: "< 3,5 g/dia. A barreira ainda funciona parcialmente." },
+          { nome: "Hipertensão e oligúria", desc: "Redução da TFG pela inflamação glomerular. Retenção de sódio e água." },
+          { nome: "Estruturas comprometidas", desc: "Endotélio, membrana basal glomerular, células mesangiais." },
+        ],
+      },
+      {
+        subtitulo: "Síndrome Nefrótica",
+        texto: "Lesão primária dos podócitos, com perda maciça da barreira de filtração proteica.",
+        topicos: [
+          { nome: "Mecanismo", desc: "Redução da espessura dos processos podais (foot processes). Os poros fendidos perdem seletividade de carga e tamanho, deixando passar grandes moléculas de proteína." },
+          { nome: "Proteinúria maciça", desc: "> 3,5 g/dia. Principal critério diagnóstico. A albumina é a proteína mais perdida (albuminúria)." },
+          { nome: "Hipoalbuminemia", desc: "Queda da pressão oncótica plasmática → edema generalizado (anasarca)." },
+          { nome: "Hiperlipidemia", desc: "O fígado compensa a queda de albumina produzindo mais lipoproteínas (VLDL). Resultado: dislipidemia." },
+          { nome: "Urina espumosa", desc: "A presença de proteína na urina reduz a tensão superficial, causando formação de espuma persistente." },
+          { nome: "Estrutura comprometida", desc: "Principalmente os podócitos glomerulares (células epiteliais viscerais)." },
+        ],
+        destaque: { titulo: "Comparativo: Nefrítica × Nefrótica", itens: [
+          "Nefrítica: hematúria dismórfica + proteinúria LEVE + HAS + oligúria",
+          "Nefrótica: SEM hematúria + proteinúria MACIÇA (>3,5g/dia) + edema + hiperlipidemia",
+          "Nefrítica afeta: endotélio, membrana basal, células mesangiais",
+          "Nefrótica afeta: podócitos (poros fendidos)",
+          "Urina espumosa é característico da síndrome NEFRÓTICA",
+        ]},
+      },
+    ],
+  },
+  {
+    id: "tfg",
+    titulo: "📊 Avaliação da Função Renal (TFG)",
+    cor: "#1a6b3a",
+    corClara: "#e8f5ee",
+    conteudo: [
+      {
+        subtitulo: "O que é a TFG?",
+        texto: "A Taxa de Filtração Glomerular (TFG) é o índice de função renal que representa a soma da filtração de todos os néfrons funcionais. É o melhor marcador da capacidade renal global.",
+        topicos: [
+          { nome: "Estágio 1 (Normal ou Leve)", desc: "TFG > 90 mL/min — rim funcionando adequadamente" },
+          { nome: "Estágio 2 (Brando)", desc: "TFG 60–89 mL/min — leve redução, ainda assintomático" },
+          { nome: "Estágio 3 (Moderado)", desc: "TFG 30–59 mL/min — início de sintomas e complicações" },
+          { nome: "Estágio 4 (Severo)", desc: "TFG 15–29 mL/min — rins insuficientes, preparar para TRS" },
+          { nome: "Estágio 5 (Falência)", desc: "TFG < 15 mL/min — rins em falência, diálise necessária" },
+        ],
+      },
+      {
+        subtitulo: "Como mensurar a TFG: Depuração (Clearance)",
+        texto: "A depuração de uma substância reflete a TFG quando essa substância é livremente filtrada, não reabsorvida e não secretada.",
+        topicos: [
+          { nome: "Inulina", desc: "Padrão ouro. Polímero de frutose exógeno. Filtrado livremente, não reabsorvido, não secretado, não metabolizado. D_Inulina = TFG real." },
+          { nome: "Creatinina", desc: "Marcador endógeno. Produzida pelo metabolismo da creatina muscular. Ligeiramente secretada nos túbulos (superestima TFG ~10-20%). Prático e amplamente usado." },
+        ],
+        destaque: { titulo: "Fórmula da Depuração", itens: [
+          "D = [Substância]urina × V_urina / [Substância]plasma",
+          "D = Clearance (mL/min)",
+          "[S]U = concentração urinária da substância",
+          "VU = fluxo urinário (mL/min) — converter mL/h ÷ 60",
+          "[S]P = concentração plasmática da substância",
+          "Normaliza-se para 1,73 m² de superfície corporal",
+        ]},
+      },
+      {
+        subtitulo: "Exemplo resolvido da aula",
+        texto: "Paciente, 38 anos. Fluxo urinário: 6 mL/h. Creatinina plasmática: 4 mg/dL. Creatinina urinária: 500 mg/dL.",
+        topicos: [
+          { nome: "Passo 1: converter VU", desc: "6 mL/h ÷ 60 = 0,1 mL/min" },
+          { nome: "Passo 2: aplicar a fórmula", desc: "D_C = 500 × 0,1 / 4 = 50/4 = 12,5 mL/min" },
+          { nome: "Passo 3: normalizar", desc: "D_C = 12,5 mL/min/1,73m²" },
+          { nome: "Passo 4: interpretar", desc: "TFG de 12,5 → Estágio 5 (próximo de falência). Rins em falência!" },
+        ],
+      },
+      {
+        subtitulo: "Mecanismos reguladores da TFG",
+        texto: "O rim possui mecanismos próprios (autorregulação) e externos para manter a TFG estável.",
+        topicos: [
+          { nome: "Mecanismo miogênico (intrínseco)", desc: "Quando a pressão sobe, a arteríola aferente se contrai automaticamente, mantendo a pressão glomerular constante. Resposta rápida à variação de pressão." },
+          { nome: "Retroalimentação túbulo-glomerular (intrínseca)", desc: "A mácula densa detecta ↑ NaCl no TCD → libera adenosina → contrai a arteríola aferente → ↓ TFG. Autorregulação local." },
+          { nome: "Nervos simpáticos (extrínseco)", desc: "Ativação simpática → vasoconstricção da arteríola aferente → ↓ TFG. Relevante em situações de estresse/choque." },
+          { nome: "SRAA (extrínseco)", desc: "Angiotensina II → contrai arteríola eferente → mantém pressão glomerular quando há ↓ volemia. Também estimula produção de aldosterona." },
+          { nome: "Prostaglandinas e óxido nítrico", desc: "Vasodilatadores. Protegem a TFG em situações de isquemia e estresse. Os AINEs bloqueiam as prostaglandinas → risco de IRA!" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "litiase",
+    titulo: "🪨 Litíase Renal",
+    cor: "#b5541c",
+    corClara: "#fdf0e8",
+    conteudo: [
+      {
+        subtitulo: "O que é litíase renal?",
+        texto: "Litíase renal (nefrolitíase/cálculo renal) é a formação de cristais aglomerados dentro das diferentes vias do trato urinário, causando obstrução e dor intensa (cólica renal).",
+        topicos: [
+          { nome: "Cálculos de oxalato de cálcio", desc: "Mais comuns (70-80%). Associados à hipercalciúria, hiperoxalúria, hipocitratúria. Radiopacos." },
+          { nome: "Cálculos de fosfato de cálcio", desc: "Associados à acidose tubular renal e hiperparatireoidismo. Urina alcalina favorece formação." },
+          { nome: "Cálculos de fosfato de amônio (estruvita)", desc: "Associados a infecções por bactérias urease-positivas (Proteus, Klebsiella). Formam cálculos coraliformes." },
+          { nome: "Cálculos de ácido úrico", desc: "Radiotransparentes. Associados à hiperuricemia e urina muito ácida." },
+        ],
+      },
+      {
+        subtitulo: "Fatores que favorecem a formação",
+        texto: "A litíase resulta do desequilíbrio entre fatores promotores e inibidores da cristalização:",
+        topicos: [
+          { nome: "↓ ingesta de H₂O", desc: "Reduz o volume urinário → concentra os solutos → favorece supersaturação e cristalização." },
+          { nome: "Hipercalciúria", desc: "Excesso de cálcio na urina (>250 mg/dia em mulheres, >300 mg em homens). Pode ser absortiva, renal ou reabsortiva." },
+          { nome: "Hipocitratúria", desc: "Citrato é inibidor natural da cristalização de cálcio. Sua deficiência favorece formação de cálculos." },
+          { nome: "Hiperparatireoidismo", desc: "↑ PTH → ↑ reabsorção óssea de Ca²⁺ → hipercalcemia → hipercalciúria → litíase." },
+          { nome: "Obstrução tubular", desc: "O cálculo obstrui o túbulo → ↑ pressão no espaço de Bowman → ↓ TFG → possível IRA obstrutiva." },
+        ],
+        destaque: { titulo: "Mecanismos fisiológicos de proteção", itens: [
+          "PTH + Calcitriol (Vit D): mantêm os níveis circulantes de Ca²⁺ estáveis",
+          "THP/Uromodulina: proteína mais abundante da urina — inibe a cristalização, evitando a formação de cálculos",
+          "Citrato urinário: quelante do cálcio, reduz sua disponibilidade para cristalização",
+          "Boa ingesta hídrica: dilui os solutos e aumenta o fluxo urinário",
+        ]},
+      },
+    ],
+  },
+  {
+    id: "ira",
+    titulo: "⚡ Insuficiência Renal Aguda (IRA)",
+    cor: "#8b1a1a",
+    corClara: "#fceaea",
+    conteudo: [
+      {
+        subtitulo: "Definição e características",
+        texto: "A IRA é uma condição clínica em que os rins perdem rapidamente a capacidade de excretar resíduos e equilibrar fluidos e eletrólitos. Ocorre em dias a poucos meses.",
+        topicos: [
+          { nome: "Critério diagnóstico principal", desc: "Débito urinário < 0,5 mL/kg/h por mais de 6 horas (oligúria)" },
+          { nome: "Elevação de creatinina sérica", desc: "↑ ≥ 0,3 mg/dL em 48h ou ≥ 50% em 7 dias (critérios KDIGO)" },
+          { nome: "Lesão tubular aguda (LTA)", desc: "As células epiteliais tubulares são lesadas por isquemia ou toxinas. São as mais vulneráveis pois recebem maior parte dos fármacos filtrados." },
+        ],
+      },
+      {
+        subtitulo: "Causas da IRA",
+        texto: "A IRA é classicamente dividida em três categorias conforme a localização da lesão:",
+        topicos: [
+          { nome: "IRA pré-renal", desc: "↓ perfusão renal. Causas: desidratação, ICC, choque, sepse. Rim estruturalmente intacto, mas hipoperfundido. Reversível rapidamente com restauração do volume." },
+          { nome: "IRA intrínseca (renal)", desc: "Lesão do parênquima renal. Causas: isquemia prolongada, drogas nefrotóxicas (aminoglicosídeos, cisplatina, contraste iodado, AINEs), síndrome nefrítica." },
+          { nome: "IRA pós-renal (obstrutiva)", desc: "Obstrução ao fluxo urinário. Causas: cálculos, hiperplasia prostática, tumor. Reversível se tratada a tempo." },
+        ],
+        destaque: { titulo: "Cascata patológica da IRA isquêmica", itens: [
+          "1. ↓ suprimento sanguíneo renal",
+          "2. Lesão isquêmica das células tubulares",
+          "3. Acúmulo de metabólitos tóxicos intracelulares",
+          "4. ↑ espécies reativas de oxigênio (ROS)",
+          "5. Inflamação → perpetuação do dano",
+          "6. ↓ TFG → uremia, distúrbios eletrolíticos",
+        ]},
+      },
+      {
+        subtitulo: "Resposta fisiológica compensatória",
+        texto: "O rim tenta preservar a TFG através de mecanismos de autorregulação:",
+        topicos: [
+          { nome: "Reflexo de distensão miogênica", desc: "Arteríola aferente se dilata para manter fluxo quando a pressão cai." },
+          { nome: "Retroalimentação túbulo-glomerular", desc: "Mácula densa detecta ↓ NaCl → inibe vasoconstricção → dilata arteríola aferente." },
+          { nome: "↑ Angiotensina II local", desc: "Contrai a arteríola eferente para manter a pressão de filtração mesmo com ↓ fluxo aferente." },
+          { nome: "Limite da compensação", desc: "Quando a PAM < 70-80 mmHg, os mecanismos falham e a TFG cai drasticamente." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "drc",
+    titulo: "🔄 Doença Renal Crônica (DRC)",
+    cor: "#1a4a6b",
+    corClara: "#e8f0f8",
+    conteudo: [
+      {
+        subtitulo: "Definição",
+        texto: "DRC é uma anormalidade estrutural e/ou funcional renal persistente por 3 meses ou mais, com implicações para a saúde. Pode resultar de inúmeras doenças, com progressão lenta e insidiosa.",
+        topicos: [
+          { nome: "Nefropatia diabética", desc: "Causa mais comum no mundo. A hiperglicemia crônica danifica os capilares glomerulares (glomeruloesclerose de Kimmelstiel-Wilson)." },
+          { nome: "Hipertensão arterial", desc: "Segunda causa mais comum. Lesão endotelial vascular → glomeruloesclerose → fibrose intersticial." },
+          { nome: "Glomerulopatias", desc: "Primárias (IgA, GESF) ou secundárias (lúpus). Inflamação crônica glomerular progressiva." },
+        ],
+      },
+      {
+        subtitulo: "Mecanismo de progressão: ciclo vicioso da fibrose",
+        texto: "A DRC progride por um ciclo de 4 etapas que se autoamplifica:",
+        topicos: [
+          { nome: "1. Dano celular inicial", desc: "Apoptose endotelial, parada do ciclo celular tubular, dano de organelas, rarefação de capilares peritubulares." },
+          { nome: "2. Mediadores pró-inflamatórios", desc: "Células danificadas liberam citocinas → infiltração de células inflamatórias → perpetuação da lesão." },
+          { nome: "3. Fatores pró-fibróticos", desc: "TGF-β, PDGF, CTGF → ativam miofibroblastos → expansão e remodelamento da matriz extracelular." },
+          { nome: "4. Fibrose renal", desc: "Substituição do parênquima funcional por tecido cicatricial. Néfrons remanescentes tentam compensar → hiperfiltração → mais dano." },
+        ],
+        destaque: { titulo: "Compensação fisiológica na DRC", itens: [
+          "Os néfrons remanescentes aumentam sua TFG individual (hiperfiltração compensatória)",
+          "O rim mantém a homeostase eletrolítica e ácido-básica enquanto há néfrons funcionais",
+          "Tampões fisiológicos (bicarbonato, hemoglobina, proteínas) ajudam a compensar a acidose",
+          "Mecanismos extra e intrarrenais de regulação retardam a perda funcional",
+          "Quando a TFG < 15 mL/min, os mecanismos compensatórios falham → uremia",
+        ]},
+      },
+      {
+        subtitulo: "Complicações sistêmicas da DRC",
+        texto: "Com a perda progressiva de néfrons, surgem complicações em múltiplos sistemas:",
+        topicos: [
+          { nome: "Anemia", desc: "↓ eritropoetina (EPO) produzida pelas células peritubulares → menos estímulo à eritropoese → anemia normocítica normocrômica." },
+          { nome: "Doença mineral óssea", desc: "↓ calcitriol (1,25-OH₂-VitD) → hipocalcemia → ↑ PTH (hiperparatireoidismo secundário) → osteodistrofia renal." },
+          { nome: "Hipertensão e sobrecarga de volume", desc: "Retenção de sódio e água → HAS → maior carga no coração e nos néfrons remanescentes." },
+          { nome: "Acidose metabólica", desc: "↓ excreção de H⁺ e ↓ produção de NH₄⁺ → acidose metabólica com ânion gap elevado (urêmica)." },
+          { nome: "Hipercalemia", desc: "↓ excreção renal de K⁺ → risco de arritmias fatais. Agravada por acidose (shift K⁺ para extracelular)." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "itu",
+    titulo: "🦠 Infecções do Trato Urinário (ITU)",
+    cor: "#2d6b1a",
+    corClara: "#e9f5e8",
+    conteudo: [
+      {
+        subtitulo: "Definição e classificação",
+        texto: "ITU é a infecção bacteriana do trato urinário que pode ser limitada à bexiga (cistite) ou envolver todo o sistema, incluindo os rins (pielonefrite) e o tecido perinéfrico.",
+        topicos: [
+          { nome: "Cistite", desc: "Infecção confinada à bexiga. Sintomas: disúria, polaciúria, urgência miccional, urina turva com odor fétido." },
+          { nome: "Pielonefrite", desc: "Infecção ascendente que atinge os rins. Sintomas: febre, calafrios, dor lombar (sinal de Giordano+), náuseas." },
+          { nome: "Bacteriúria assintomática", desc: "Presença de bactérias na urina sem sintomas. Tratamento só indicado em gestantes, pré-cirurgia urológica e imunossuprimidos." },
+        ],
+      },
+      {
+        subtitulo: "Mecanismo de patogenicidade bacteriana",
+        texto: "As bactérias uropatogênicas (principalmente E. coli uropatogênica - UPEC) possuem fatores de virulência específicos:",
+        topicos: [
+          { nome: "1. Adesão (pili/fímbrias)", desc: "As fímbrias tipo 1 e P aderem às glicoproteínas do urotélio. O pili se liga a receptores específicos das células epiteliais urinárias." },
+          { nome: "2. Hemolisina (toxina)", desc: "Produzida por UPEC. Perfura membranas celulares → lesão epitelial → hemorragia local → hematúria." },
+          { nome: "3. Invasão intracelular", desc: "Após a lesão epitelial, as bactérias invadem as células da bexiga, formando comunidades bacterianas intracelulares (IBCs) protegidas de antibióticos." },
+          { nome: "4. Sequestro de Fe²⁺", desc: "As bactérias capturam ferro (nutriente essencial para sua proliferação) usando sideróforos. O ferro é limitante para o crescimento bacteriano." },
+        ],
+        destaque: { titulo: "Mecanismos fisiológicos de defesa do SGU", itens: [
+          "Glicocálice epitelial: reveste o urotélio, resistindo à aderência bacteriana",
+          "↑ Descamação epitelial: durante a ITU, as células infectadas são eliminadas com as bactérias",
+          "IgA secretora: produzida pelo SGU, cria barreira imunológica contra a ascensão bacteriana",
+          "THP/Uromodulina: se liga às fímbrias bacterianas, facilitando a remoção pela urina",
+          "Fluxo urinário: o simples arraste da urina elimina bactérias não aderidas",
+        ]},
+      },
+      {
+        subtitulo: "Fatores predisponentes à ITU",
+        texto: "Condições que aumentam o risco de desenvolvimento de ITU:",
+        topicos: [
+          { nome: "Desnutrição", desc: "↓ imunidade → menos IgA secretora e menos capacidade de resposta inflamatória local." },
+          { nome: "Diabetes melito", desc: "Glicosúria favorece crescimento bacteriano. Neuropatia autonômica → retenção urinária → estase." },
+          { nome: "Obstrução urinária", desc: "Cálculos, estenose uretral ou hiperplasia prostática → estase urinária → crescimento bacteriano." },
+          { nome: "Corpos estranhos (cateter de demora)", desc: "Formação de biofilme bacteriano sobre o cateter, resistente a antibióticos e à resposta imune." },
+          { nome: "Imunossupressão", desc: "HIV, corticoides, quimioterapia → ↓ resposta imune → ITU por germes oportunistas ou recorrentes." },
+        ],
+      },
+    ],
+  },
+];
+
+const QUESTOES = [
+  {
+    enunciado: "Uma paciente de 65 anos apresenta urina espumosa, hipertensão, hiperlipidemia e proteinúria maciça (>3,5 g/dia). Qual é o diagnóstico mais provável e qual estrutura glomerular está comprometida?",
+    opcoes: [
+      "Síndrome nefrítica — membrana basal glomerular",
+      "Síndrome nefrótica — podócitos glomerulares",
+      "Síndrome nefrótica — células mesangiais",
+      "Síndrome nefrítica — endotélio glomerular",
+    ],
+    correta: 1,
+    explicacao: "A proteinúria MACIÇA (>3,5 g/dia), urina espumosa, hiperlipidemia e ausência de hematúria dismórfica apontam para SÍNDROME NEFRÓTICA. A estrutura comprometida são os PODÓCITOS: a redução da espessura dos processos podais (foot processes) elimina a seletividade dos poros fendidos, permitindo passagem maciça de proteínas. A urina espumosa ocorre porque proteínas reduzem a tensão superficial da urina.",
+    tema: "nefritica_nefrotica",
+  },
+  {
+    enunciado: "Um paciente de 38 anos tem fluxo urinário de 6 mL/h, creatinina plasmática de 4 mg/dL e creatinina urinária de 500 mg/dL. Qual é a TFG e em qual estágio de DRC ele se enquadra?",
+    opcoes: [
+      "TFG = 125 mL/min — Estágio 1 (normal)",
+      "TFG = 75 mL/min — Estágio 2 (brando)",
+      "TFG = 12,5 mL/min/1,73m² — Estágio 5 (próximo de falência)",
+      "TFG = 30 mL/min — Estágio 3 (moderado)",
+    ],
+    correta: 2,
+    explicacao: "Cálculo: D_C = [C]U × VU / [C]P. Converter VU: 6 mL/h ÷ 60 = 0,1 mL/min. D_C = 500 × 0,1 / 4 = 50/4 = 12,5 mL/min/1,73m². TFG de 12,5 mL/min corresponde ao Estágio 5 (próximo de falência renal, <15 mL/min). Este paciente necessita de avaliação urgente para terapia de substituição renal (diálise).",
+    tema: "tfg",
+  },
+  {
+    enunciado: "Em relação à questão da slide (M.G.N., 65 anos, urina escassa e espumosa, HAS, hiperlipidemia, proteinúria maciça): sobre a assertiva 'A proteína de Tamm-Horsfall é o evento fisiológico que mais regula os danos desta paciente' — ela é CORRETA ou INCORRETA? Por quê?",
+    opcoes: [
+      "Correta — a THP inibe a cristalização urinária, prevenindo cálculos",
+      "Incorreta — a THP atua principalmente nas ITUs e litíase, não na síndrome nefrótica",
+      "Correta — a THP é um regulador universal da filtração glomerular",
+      "Incorreta — o principal mecanismo é o SRAA, não a THP",
+    ],
+    correta: 1,
+    explicacao: "INCORRETA. A Proteína de Tamm-Horsfall (THP/uromodulina) tem dois papéis principais: (1) nas ITUs, adere às fímbrias bacterianas facilitando sua eliminação; (2) na litíase renal, inibe a cristalização urinária. Na síndrome NEFRÓTICA, o principal evento fisiopatológico é a lesão dos PODÓCITOS com perda dos processos podais e proteinúria maciça. Os mecanismos compensatórios relevantes aqui são os reguladores glomerulares (TFG, SRAA), não a THP.",
+    tema: "nefritica_nefrotica",
+  },
+  {
+    enunciado: "Um paciente com hiperparatireoidismo apresenta hipercalciúria e forma cálculo renal. Qual o mecanismo fisiológico que normalmente preveniria esse quadro?",
+    opcoes: [
+      "A THP/uromodulina inibe a cristalização e o calcitriol reduz a absorção intestinal de Ca²⁺",
+      "O PTH aumenta a excreção renal de Ca²⁺ e a THP facilita a eliminação de cristais",
+      "PTH e calcitriol mantêm os níveis de Ca²⁺ estáveis; THP/uromodulina inibe a cristalização",
+      "O citrato sérico quelanta o Ca²⁺ e impede sua filtração glomerular",
+    ],
+    correta: 2,
+    explicacao: "Em condições normais: O PTH e o CALCITRIOL (vitamina D ativa) atuam em conjunto para manter os níveis circulantes de Ca²⁺ estáveis — PTH estimula a reabsorção tubular de Ca²⁺ e ativa calcitriol; calcitriol aumenta absorção intestinal. A THP/UROMODULINA na urina inibe fisicamente a cristalização, impedindo a formação de cálculos. No hiperparatireoidismo, o excesso de PTH causa hipercalcemia e hipercalciúria, sobrecarregando esses mecanismos.",
+    tema: "litiase",
+  },
+  {
+    enunciado: "Um paciente em choque séptico desenvolve IRA. O rim tenta compensar a queda da TFG. Qual dos mecanismos a seguir NÃO faz parte da autorregulação renal intrínseca?",
+    opcoes: [
+      "Reflexo de distensão miogênica da arteríola aferente",
+      "Retroalimentação túbulo-glomerular pela mácula densa",
+      "Ativação do sistema renina-angiotensina-aldosterona",
+      "Elevação local de angiotensina II para constrição da arteríola eferente",
+    ],
+    correta: 2,
+    explicacao: "O SRAA é um mecanismo EXTRÍNSECO (sistêmico), não intrínseco. Os mecanismos INTRÍNSECOS de autorregulação renal são: (1) Mecanismo miogênico — a arteríola aferente se dilata/contrai respondendo à pressão; (2) Retroalimentação túbulo-glomerular — mácula densa detecta NaCl e regula a arteríola aferente. O SRAA envolve renina (células justaglomerulares), angiotensinogênio (fígado), ECA (pulmão) e aldosterona (adrenal) — portanto, extrínseco e sistêmico.",
+    tema: "ira",
+  },
+  {
+    enunciado: "Um paciente com ITU por E. coli apresenta hematúria. Qual mecanismo bacteriano explica o sangramento e qual defesa fisiológica o SGU ativa para remover as bactérias aderidas?",
+    opcoes: [
+      "Sequestro de Fe²⁺ causa hemólise; o glicocálice remove bactérias",
+      "A hemolisina perfura células epiteliais causando hemorragia; a THP/uromodulina adere às fímbrias bacterianas, facilitando a eliminação pela urina",
+      "O pili perfura vasos sanguíneos; a IgA neutraliza diretamente as bactérias",
+      "A invasão intracelular rompe capilares; a descamação epitelial é o único mecanismo de defesa",
+    ],
+    correta: 1,
+    explicacao: "O mecanismo correto é: (1) A HEMOLISINA (toxina bacteriana) perfura as membranas das células epiteliais urinárias → lesão epitelial → hemorragia → hematúria NÃO dismórfica. (2) A THP/UROMODULINA se liga especificamente às fímbrias tipo 1 das bactérias, impedindo sua aderência ao urotélio e facilitando sua eliminação pelo fluxo urinário. Outros mecanismos de defesa incluem glicocálice (resistência à aderência), descamação epitelial (remoção mecânica) e IgA secretora (barreira à ascensão).",
+    tema: "itu",
+  },
+  {
+    enunciado: "Na DRC, um paciente desenvolve anemia e doença óssea simultaneamente. Qual é o mecanismo fisiopatológico que une essas duas complicações?",
+    opcoes: [
+      "A fibrose renal reduz a produção de EPO e calcitriol, causando anemia e osteoporose",
+      "A acidose metabólica inibe a eritropoese e desmineraliza os ossos diretamente",
+      "A perda de néfrons reduz: (a) produção de EPO → anemia; (b) síntese de calcitriol → hipocalcemia → ↑ PTH → osteodistrofia renal",
+      "A hipercalemia inibe a medula óssea e a retém cálcio nos tecidos moles",
+    ],
+    correta: 2,
+    explicacao: "Com a perda progressiva de néfrons na DRC ocorrem dois eventos paralelos: (a) ANEMIA: as células peritubulares do rim produzem eritropoetina (EPO). Com menos néfrons funcionais, há ↓ EPO → menos estimulação da eritropoese → anemia normocítica normocrômica. (b) DOENÇA ÓSSEA: os rins ativam a vitamina D (calcitriol - 1,25-OH₂-VitD). Com ↓ néfrons → ↓ calcitriol → ↓ absorção intestinal de Ca²⁺ → hipocalcemia → ↑ PTH (hiperparatireoidismo secundário) → reabsorção óssea → osteodistrofia renal.",
+    tema: "drc",
+  },
+  {
+    enunciado: "Qual é a diferença fundamental entre a hematúria na síndrome nefrítica e na litíase renal ao exame do sedimento urinário?",
+    opcoes: [
+      "Na nefrítica há mais hemácias; na litíase há menos",
+      "Na nefrítica as hemácias são dismórficas (acantócitos); na litíase são morfologicamente normais (não-dismórficas)",
+      "Na litíase há cilindros hemáticos; na nefrítica há apenas hemácias livres",
+      "Na nefrítica a hematúria é macroscópica; na litíase é sempre microscópica",
+    ],
+    correta: 1,
+    explicacao: "A distinção morfológica é o principal critério diagnóstico: HEMATÚRIA DISMÓRFICA (acantócitos/hemácias irregulares) = as hemácias passaram forçosamente pelo glomérulo inflamado, sofrendo deformação osmótica e mecânica → indica SÍNDROME NEFRÍTICA. HEMATÚRIA NÃO-DISMÓRFICA (hemácias de morfologia normal) = as hemácias saíram de vasos íntegros em vias urinárias baixas, sem passar pela barreira glomerular → indica LITÍASE RENAL, neoplasia ou trauma.",
+    tema: "nefritica_nefrotica",
+  },
+];
+
+const RESUMO = {
+  mapa: [
+    { nivel: "Homeostase preservada?", sim: "Rins compensando", nao: "Investigar local" },
+    {
+      glomérulo: [
+        { nome: "S. Nefrítica", achados: "Hematúria dismórfica + proteinúria leve + HAS", estrutura: "Endotélio/membrana basal/mesângio", defesa: "Mecanismos intrínsecos e extrínsecos renais" },
+        { nome: "S. Nefrótica", achados: "Proteinúria maciça >3,5g/dia + hiperlipidemia + edema", estrutura: "Podócitos", defesa: "Mecanismos de TFG" },
+      ],
+    },
+    {
+      outras: [
+        { nome: "Litíase Renal", achados: "Cristais + hipercalciúria + hipocitratúria", defesa: "PTH, Calcitriol, THP/Uromodulina" },
+        { nome: "IRA", achados: "Débito <0,5mL/kg/h por 6h + toxinas/isquemia", defesa: "Autorregulação intrínseca + ↑ ANGII" },
+        { nome: "DRC", achados: "Dano estrutural ≥3 meses + fibrose progressiva", defesa: "Tampões + mecanismos intra/extrarrenais" },
+        { nome: "ITU", achados: "Bactérias + leucócitos + hematúria não-dismórfica", defesa: "Glicocálice, descamação, IgA, THP" },
+      ],
+    },
+  ],
+};
+
+function App() {
+  const [temaAtivo, setTemaAtivo] = useState(null);
+  const [secaoAtiva, setSecaoAtiva] = useState("menu");
+  const [questaoAtual, setQuestaoAtual] = useState(0);
+  const [respostaSelecionada, setRespostaSelecionada] = useState(null);
+  const [mostrarExplicacao, setMostrarExplicacao] = useState(false);
+  const [pontuacao, setPontuacao] = useState(0);
+  const [questoesFeitasIdx, setQuestoesFeitasIdx] = useState([]);
+  const [quizFinalizado, setQuizFinalizado] = useState(false);
+
+  const tema = TEMAS.find((t) => t.id === temaAtivo);
+
+  function iniciarQuiz() {
+    setQuestaoAtual(0);
+    setRespostaSelecionada(null);
+    setMostrarExplicacao(false);
+    setPontuacao(0);
+    setQuestoesFeitasIdx([]);
+    setQuizFinalizado(false);
+    setSecaoAtiva("quiz");
+  }
+
+  function responder(idx) {
+    if (respostaSelecionada !== null) return;
+    setRespostaSelecionada(idx);
+    setMostrarExplicacao(true);
+    if (idx === QUESTOES[questaoAtual].correta) {
+      setPontuacao((p) => p + 1);
+    }
+    setQuestoesFeitasIdx((prev) => [...prev, questaoAtual]);
+  }
+
+  function proximaQuestao() {
+    if (questaoAtual < QUESTOES.length - 1) {
+      setQuestaoAtual((q) => q + 1);
+      setRespostaSelecionada(null);
+      setMostrarExplicacao(false);
+    } else {
+      setQuizFinalizado(true);
+    }
+  }
+
+  const q = QUESTOES[questaoAtual];
+
+  return (
+    <div style={{ fontFamily: "'Georgia', serif", background: "#f8f6f0", minHeight: "100vh" }}>
+      {/* Header */}
+      <div style={{ background: "linear-gradient(135deg, #0f3460 0%, #16213e 100%)", color: "white", padding: "24px 32px", display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{ fontSize: 40 }}>🫘</div>
+        <div>
+          <div style={{ fontSize: 22, fontWeight: "bold", letterSpacing: 1 }}>Fisiologia do SGU</div>
+          <div style={{ fontSize: 13, opacity: 0.8 }}>Sistema Gênito Urinário — Guia Completo de Estudos</div>
+        </div>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+          {["menu", "resumo", "quiz"].map((s) => (
+            <button
+              key={s}
+              onClick={() => { setSecaoAtiva(s); setTemaAtivo(null); }}
+              style={{
+                padding: "8px 18px",
+                borderRadius: 20,
+                border: "2px solid rgba(255,255,255,0.4)",
+                background: secaoAtiva === s ? "rgba(255,255,255,0.2)" : "transparent",
+                color: "white",
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: secaoAtiva === s ? "bold" : "normal",
+              }}
+            >
+              {s === "menu" ? "📚 Temas" : s === "resumo" ? "🗺 Mapa" : "❓ Questões"}
+            </button>
+          ))}
+          <a
+            href="hub.html"
+            style={{
+              padding: "8px 18px",
+              borderRadius: 20,
+              border: "2px solid rgba(255,255,255,0.4)",
+              background: "rgba(255,255,255,0.1)",
+              color: "white",
+              textDecoration: "none",
+              fontSize: 13,
+              display: "inline-flex",
+              alignItems: "center",
+            }}
+          >
+            ⬅ Hub
+          </a>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px" }}>
+
+        {/* MENU DE TEMAS */}
+        {secaoAtiva === "menu" && !temaAtivo && (
+          <div>
+            <div style={{ textAlign: "center", marginBottom: 28 }}>
+              <div style={{ fontSize: 15, color: "#555", marginBottom: 4 }}>Selecione um tema para estudar em profundidade</div>
+              <div style={{ fontSize: 13, color: "#888" }}>Todos os tópicos da Prof. Dra. Leidiane Pinho — Unichristus 2023</div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {TEMAS.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => { setTemaAtivo(t.id); setSecaoAtiva("conteudo"); }}
+                  style={{
+                    background: "white",
+                    border: `3px solid ${t.cor}`,
+                    borderRadius: 14,
+                    padding: "20px 22px",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    transition: "transform 0.15s, box-shadow 0.15s",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${t.cor}33`; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.07)"; }}
+                >
+                  <div style={{ fontSize: 22, marginBottom: 6 }}>{t.titulo.split(" ")[0]}</div>
+                  <div style={{ fontSize: 15, fontWeight: "bold", color: t.cor }}>{t.titulo.replace(/^[^\s]+\s/, "")}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* CONTEÚDO DO TEMA */}
+        {secaoAtiva === "conteudo" && tema && (
+          <div>
+            <button
+              onClick={() => { setTemaAtivo(null); setSecaoAtiva("menu"); }}
+              style={{ background: "none", border: "none", color: "#0f3460", cursor: "pointer", fontSize: 14, marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}
+            >
+              ← Voltar aos temas
+            </button>
+            <div style={{ background: tema.cor, color: "white", borderRadius: 16, padding: "20px 28px", marginBottom: 24 }}>
+              <div style={{ fontSize: 26, fontWeight: "bold" }}>{tema.titulo}</div>
+            </div>
+            {tema.conteudo.map((bloco, bi) => (
+              <div key={bi} style={{ background: "white", borderRadius: 14, padding: 24, marginBottom: 20, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", borderLeft: `5px solid ${tema.cor}` }}>
+                <div style={{ fontSize: 18, fontWeight: "bold", color: tema.cor, marginBottom: 12 }}>{bloco.subtitulo}</div>
+                <p style={{ color: "#444", marginBottom: 16, lineHeight: 1.7, fontSize: 14 }}>{bloco.texto}</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {bloco.topicos.map((t2, ti) => (
+                    <div key={ti} style={{ background: tema.corClara, borderRadius: 10, padding: "12px 16px" }}>
+                      <div style={{ fontWeight: "bold", color: tema.cor, marginBottom: 4, fontSize: 14 }}>▸ {t2.nome}</div>
+                      <div style={{ color: "#555", fontSize: 13, lineHeight: 1.6 }}>{t2.desc}</div>
+                    </div>
+                  ))}
+                </div>
+                {bloco.destaque && (
+                  <div style={{ marginTop: 18, background: `${tema.cor}18`, border: `2px dashed ${tema.cor}`, borderRadius: 12, padding: 16 }}>
+                    <div style={{ fontWeight: "bold", color: tema.cor, marginBottom: 10, fontSize: 14 }}>⭐ {bloco.destaque.titulo}</div>
+                    <ul style={{ margin: 0, paddingLeft: 20 }}>
+                      {bloco.destaque.itens.map((item, ii) => (
+                        <li key={ii} style={{ color: "#333", fontSize: 13, marginBottom: 5, lineHeight: 1.5 }}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ))}
+            <button
+              onClick={iniciarQuiz}
+              style={{ background: tema.cor, color: "white", border: "none", borderRadius: 12, padding: "14px 28px", cursor: "pointer", fontSize: 15, fontWeight: "bold", width: "100%" }}
+            >
+              🎯 Praticar com questões
+            </button>
+          </div>
+        )}
+
+        {/* MAPA DE REVISÃO */}
+        {secaoAtiva === "resumo" && (
+          <div>
+            <div style={{ textAlign: "center", marginBottom: 24 }}>
+              <div style={{ fontSize: 20, fontWeight: "bold", color: "#0f3460" }}>🗺 Mapa de Revisão — SGU</div>
+              <div style={{ fontSize: 13, color: "#888", marginTop: 4 }}>Visão geral de todos os distúrbios e seus mecanismos de defesa</div>
+            </div>
+            <div style={{ background: "white", borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: "0 2px 12px rgba(0,0,0,0.07)" }}>
+              <div style={{ fontWeight: "bold", color: "#0f3460", marginBottom: 12, fontSize: 16 }}>🔍 Investigação inicial (sempre)</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                {["História médica detalhada", "Exame clínico (abdome/flancos)", "Sedimento urinário", "Urina 24h (proteína/glicose)", "TFG (depuração creatinina)", "Localizar glomérulo vs. túbulos"].map((item, i) => (
+                  <div key={i} style={{ background: "#e8f4fd", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#0f4c75", fontWeight: "bold" }}>{item}</div>
+                ))}
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+              <div style={{ background: "white", borderRadius: 14, padding: 20, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", borderTop: "4px solid #7b2d8b" }}>
+                <div style={{ fontWeight: "bold", color: "#7b2d8b", marginBottom: 12 }}>🫧 GLOMÉRULO</div>
+                {[{ nome: "S. NEFRÍTICA", cor: "#7b2d8b", itens: ["Hematúria DISMÓRFICA", "Proteinúria LEVE (<3,5g/dia)", "HAS + Oligúria", "Estrutura: Endotélio, MB, Mesângio"] }, { nome: "S. NEFRÓTICA", cor: "#a020a0", itens: ["SEM hematúria", "Proteinúria MACIÇA (>3,5g/dia)", "Hiperlipidemia + Edema", "Urina ESPUMOSA", "Estrutura: PODÓCITOS"] }].map((s, i) => (
+                  <div key={i} style={{ background: "#f5e9f8", borderRadius: 10, padding: "12px 14px", marginBottom: 8 }}>
+                    <div style={{ fontWeight: "bold", color: s.cor, marginBottom: 6, fontSize: 13 }}>{s.nome}</div>
+                    {s.itens.map((it, j) => <div key={j} style={{ fontSize: 12, color: "#444", marginBottom: 2 }}>• {it}</div>)}
+                  </div>
+                ))}
+              </div>
+              <div style={{ background: "white", borderRadius: 14, padding: 20, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", borderTop: "4px solid #1a6b3a" }}>
+                <div style={{ fontWeight: "bold", color: "#1a6b3a", marginBottom: 12 }}>📊 TFG (Estágios)</div>
+                {[["1", "> 90", "Normal"], ["2", "60–89", "Brando"], ["3", "30–59", "Moderado"], ["4", "15–29", "Severo"], ["5", "< 15", "Falência"]].map(([e, v, n], i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, background: "#e8f5ee", borderRadius: 8, padding: "6px 10px" }}>
+                    <div style={{ background: "#1a6b3a", color: "white", borderRadius: 4, padding: "2px 8px", fontWeight: "bold", fontSize: 12 }}>{e}</div>
+                    <div style={{ fontSize: 12, color: "#1a6b3a", fontWeight: "bold" }}>{v} mL/min</div>
+                    <div style={{ fontSize: 11, color: "#555" }}>{n}</div>
+                  </div>
+                ))}
+                <div style={{ marginTop: 12, background: "#e8f5ee", borderRadius: 8, padding: 10 }}>
+                  <div style={{ fontSize: 12, fontWeight: "bold", color: "#1a6b3a", marginBottom: 4 }}>Fórmula:</div>
+                  <div style={{ fontSize: 12, color: "#333", fontFamily: "monospace" }}>D = [S]U × VU ÷ [S]P</div>
+                </div>
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {[
+                { titulo: "🪨 LITÍASE RENAL", cor: "#b5541c", corC: "#fdf0e8", itens: ["Cristais: oxalato Ca²⁺, fosfato Ca²⁺, fosfato amônio", "Hipercalciúria + Hipocitratúria", "Hematúria NÃO-dismórfica", "Defesas: PTH, Calcitriol, THP/Uromodulina"] },
+                { titulo: "⚡ IRA", cor: "#8b1a1a", corC: "#fceaea", itens: ["Débito < 0,5 mL/kg/h por >6h", "Causas: isquemia, toxinas, drogas", "Autorregulação: miogênica + TG + ↑AngII", "Reversível se tratada"] },
+                { titulo: "🔄 DRC", cor: "#1a4a6b", corC: "#e8f0f8", itens: ["Dano estrutural ≥ 3 meses", "Causas: DM, HAS, glomerulopatias", "Ciclo: dano → inflamação → fibrose", "Complicações: anemia (↓EPO), doença óssea (↓calcitriol)"] },
+                { titulo: "🦠 ITU", cor: "#2d6b1a", corC: "#e9f5e8", itens: ["Bactérias: pili → adesina → hemolisina → Fe²⁺", "Hematúria NÃO-dismórfica + leucocitúria", "Defesas: glicocálice, descamação, IgA, THP", "Fatores de risco: DM, cateter, obstrução"] },
+              ].map((card, i) => (
+                <div key={i} style={{ background: "white", borderRadius: 14, padding: 18, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", borderTop: `4px solid ${card.cor}` }}>
+                  <div style={{ fontWeight: "bold", color: card.cor, marginBottom: 10 }}>{card.titulo}</div>
+                  {card.itens.map((it, j) => (
+                    <div key={j} style={{ background: card.corC, borderRadius: 7, padding: "6px 10px", marginBottom: 5, fontSize: 12, color: "#333" }}>• {it}</div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div style={{ background: "#fff3cd", border: "2px solid #ffc107", borderRadius: 12, padding: 16, marginTop: 20, textAlign: "center" }}>
+              <div style={{ fontWeight: "bold", color: "#856404", fontSize: 15 }}>⚠️ Atenção!</div>
+              <div style={{ color: "#856404", fontSize: 13, marginTop: 4 }}>2 ou mais destes eventos podem ocorrer simultaneamente no mesmo paciente!</div>
+            </div>
+          </div>
+        )}
+
+        {/* QUIZ */}
+        {secaoAtiva === "quiz" && (
+          <div>
+            {!quizFinalizado ? (
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                  <div style={{ fontSize: 14, color: "#555" }}>Questão {questaoAtual + 1} de {QUESTOES.length}</div>
+                  <div style={{ background: "#0f3460", color: "white", borderRadius: 20, padding: "4px 14px", fontSize: 13 }}>
+                    ✓ {pontuacao} pontos
+                  </div>
+                </div>
+                <div style={{ background: "white", width: "100%", height: 6, borderRadius: 3, marginBottom: 20, overflow: "hidden" }}>
+                  <div style={{ background: "#0f3460", height: "100%", width: `${((questaoAtual) / QUESTOES.length) * 100}%`, transition: "width 0.3s" }} />
+                </div>
+                <div style={{ background: "white", borderRadius: 16, padding: 28, boxShadow: "0 4px 20px rgba(0,0,0,0.1)", marginBottom: 20 }}>
+                  <div style={{ fontSize: 15, color: "#222", lineHeight: 1.7, fontWeight: "bold", marginBottom: 24 }}>{q.enunciado}</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    {q.opcoes.map((op, i) => {
+                      let bg = "white", border = "2px solid #ddd", color2 = "#333";
+                      if (respostaSelecionada !== null) {
+                        if (i === q.correta) { bg = "#d4edda"; border = "2px solid #28a745"; color2 = "#155724"; }
+                        else if (i === respostaSelecionada && i !== q.correta) { bg = "#f8d7da"; border = "2px solid #dc3545"; color2 = "#721c24"; }
+                      } else if (respostaSelecionada === null) {
+                        border = "2px solid #ddd";
+                      }
+                      return (
+                        <button key={i} onClick={() => responder(i)} style={{ background: bg, border, borderRadius: 10, padding: "14px 18px", textAlign: "left", cursor: respostaSelecionada !== null ? "default" : "pointer", color: color2, fontSize: 13, lineHeight: 1.5, transition: "all 0.2s" }}>
+                          <span style={{ fontWeight: "bold", marginRight: 8 }}>{["A", "B", "C", "D"][i]})</span> {op}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                {mostrarExplicacao && (
+                  <div style={{ background: respostaSelecionada === q.correta ? "#d4edda" : "#fff3cd", border: `2px solid ${respostaSelecionada === q.correta ? "#28a745" : "#ffc107"}`, borderRadius: 14, padding: 20, marginBottom: 20 }}>
+                    <div style={{ fontWeight: "bold", marginBottom: 8, color: respostaSelecionada === q.correta ? "#155724" : "#856404" }}>
+                      {respostaSelecionada === q.correta ? "✅ Correto!" : "❌ Incorreto"} — Explicação:
+                    </div>
+                    <div style={{ fontSize: 13, color: "#333", lineHeight: 1.7 }}>{q.explicacao}</div>
+                  </div>
+                )}
+                {mostrarExplicacao && (
+                  <button onClick={proximaQuestao} style={{ background: "#0f3460", color: "white", border: "none", borderRadius: 12, padding: "14px 28px", cursor: "pointer", fontSize: 15, fontWeight: "bold", width: "100%" }}>
+                    {questaoAtual < QUESTOES.length - 1 ? "Próxima questão →" : "Ver resultado final"}
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 60, marginBottom: 16 }}>{pontuacao >= 6 ? "🏆" : pontuacao >= 4 ? "📚" : "💪"}</div>
+                <div style={{ fontSize: 28, fontWeight: "bold", color: "#0f3460", marginBottom: 8 }}>Resultado Final</div>
+                <div style={{ fontSize: 18, color: "#555", marginBottom: 24 }}>{pontuacao} de {QUESTOES.length} questões corretas</div>
+                <div style={{ background: "white", borderRadius: 16, padding: 24, marginBottom: 24, boxShadow: "0 4px 20px rgba(0,0,0,0.1)" }}>
+                  <div style={{ fontSize: 48, fontWeight: "bold", color: pontuacao >= 6 ? "#28a745" : pontuacao >= 4 ? "#ffc107" : "#dc3545" }}>
+                    {Math.round((pontuacao / QUESTOES.length) * 100)}%
+                  </div>
+                  <div style={{ color: "#555", marginTop: 8 }}>
+                    {pontuacao >= 6 ? "Excelente! Você domina o conteúdo do SGU!" : pontuacao >= 4 ? "Bom! Revise os temas que errou." : "Continue estudando! Revise todos os temas."}
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+                  <button onClick={iniciarQuiz} style={{ background: "#0f3460", color: "white", border: "none", borderRadius: 12, padding: "14px 24px", cursor: "pointer", fontSize: 14, fontWeight: "bold" }}>
+                    🔄 Refazer quiz
+                  </button>
+                  <button onClick={() => setSecaoAtiva("resumo")} style={{ background: "white", color: "#0f3460", border: "2px solid #0f3460", borderRadius: 12, padding: "14px 24px", cursor: "pointer", fontSize: 14, fontWeight: "bold" }}>
+                    🗺 Ver mapa de revisão
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+  </script>
+</body>
+</html>
