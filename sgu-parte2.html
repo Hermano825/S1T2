@@ -14,30 +14,6 @@
   <script type="text/babel">
 const { useState } = React;
 
-const TEMAS = [
-  {
-    id: "tema1",
-    titulo: "📌 Tema 1",
-    cor: "#0f4c75",
-    corClara: "#e8f4fd",
-    conteudo: [
-      {
-        subtitulo: "Em breve",
-        texto: "Adicione seu conteúdo aqui",
-        topicos: [],
-      },
-    ],
-  },
-];
-
-const QUESTOES = [];
-
-function App() {
-  const [temaAtivo, setTemaAtivo] = useState(null);
-  const [secaoAtiva, setSecaoAtiva] = useState("menu");
-
-  const tema = TEMAS.find((t) => t.id === temaAtivo);
-
   return (
     <div style={{ fontFamily: "'Georgia', serif", background: "#f8f6f0", minHeight: "100vh" }}>
       {/* Header */}
@@ -163,13 +139,6 @@ function App() {
     </div>
   );
 }
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
-  </script>
-</body>
-</html>
- import { useState } from "react";
 
 const modules = [
   {
@@ -682,12 +651,9 @@ function ModuleView({ mod, onBack }) {
           </div>
           <p style={{ color: "#64748b", fontSize: 12, textAlign: "center", marginTop: 16 }}>Clique no card para revelar a resposta</p>
         </div>
-      )}
-    </div>
-  );
-}
 
-export default function App() {
+
+function App() {
   const [view, setView] = useState("home");
   const [activeModule, setActiveModule] = useState(null);
 
@@ -767,4 +733,11 @@ export default function App() {
       </div>
     </div>
   );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+  </script>
+</body>
+</html>
 }
