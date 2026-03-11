@@ -14,132 +14,6 @@
   <script type="text/babel">
 const { useState } = React;
 
-  return (
-    <div style={{ fontFamily: "'Georgia', serif", background: "#f8f6f0", minHeight: "100vh" }}>
-      {/* Header */}
-      <div style={{ background: "linear-gradient(135deg, #0f3460 0%, #16213e 100%)", color: "white", padding: "24px 32px", display: "flex", alignItems: "center", gap: 16 }}>
-        <div style={{ fontSize: 40 }}>🫘</div>
-        <div>
-          <div style={{ fontSize: 22, fontWeight: "bold", letterSpacing: 1 }}>Fisiologia do SGU - Parte 2</div>
-          <div style={{ fontSize: 13, opacity: 0.8 }}>Sistema Gênito Urinário — Conteúdo Complementar</div>
-        </div>
-        <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
-          {["menu"].map((s) => (
-            <button
-              key={s}
-              onClick={() => { setSecaoAtiva(s); setTemaAtivo(null); }}
-              style={{
-                padding: "8px 18px",
-                borderRadius: 20,
-                border: "2px solid rgba(255,255,255,0.4)",
-                background: secaoAtiva === s ? "rgba(255,255,255,0.2)" : "transparent",
-                color: "white",
-                cursor: "pointer",
-                fontSize: 13,
-                fontWeight: secaoAtiva === s ? "bold" : "normal",
-              }}
-            >
-              📚 Temas
-            </button>
-          ))}
-          <a
-            href="sgu.html"
-            style={{
-              padding: "8px 18px",
-              borderRadius: 20,
-              border: "2px solid rgba(255,255,255,0.4)",
-              background: "rgba(255,255,255,0.1)",
-              color: "white",
-              textDecoration: "none",
-              fontSize: 13,
-              display: "inline-flex",
-              alignItems: "center",
-            }}
-          >
-            ← SGU Parte 1
-          </a>
-          <a
-            href="../index.html"
-            style={{
-              padding: "8px 18px",
-              borderRadius: 20,
-              border: "2px solid rgba(255,255,255,0.4)",
-              background: "rgba(255,255,255,0.1)",
-              color: "white",
-              textDecoration: "none",
-              fontSize: 13,
-              display: "inline-flex",
-              alignItems: "center",
-            }}
-          >
-            ⬅ Hub
-          </a>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px" }}>
-
-        {/* MENU DE TEMAS */}
-        {secaoAtiva === "menu" && !temaAtivo && (
-          <div>
-            <div style={{ textAlign: "center", marginBottom: 28 }}>
-              <div style={{ fontSize: 15, color: "#555", marginBottom: 4 }}>Selecione um tema para estudar</div>
-              <div style={{ fontSize: 13, color: "#888" }}>Conteúdo complementar de SGU - Parte 2</div>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16 }}>
-              {TEMAS.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => { setTemaAtivo(t.id); setSecaoAtiva("conteudo"); }}
-                  style={{
-                    background: "white",
-                    border: `3px solid ${t.cor}`,
-                    borderRadius: 14,
-                    padding: "20px 22px",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    transition: "transform 0.15s, box-shadow 0.15s",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${t.cor}33`; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.07)"; }}
-                >
-                  <div style={{ fontSize: 18, fontWeight: "bold", color: t.cor }}>{t.titulo}</div>
-                </button>
-              ))}
-            </div>
-            <div style={{ background: "#fff3cd", border: "2px solid #ffc107", borderRadius: 12, padding: 16, marginTop: 20, textAlign: "center" }}>
-              <div style={{ fontWeight: "bold", color: "#856404", fontSize: 15 }}>💡 Em Preparação</div>
-              <div style={{ color: "#856404", fontSize: 13, marginTop: 4 }}>Envie seu conteúdo e ele será adicionado automaticamente aqui!</div>
-            </div>
-          </div>
-        )}
-
-        {/* CONTEÚDO DO TEMA */}
-        {secaoAtiva === "conteudo" && tema && (
-          <div>
-            <button
-              onClick={() => { setTemaAtivo(null); setSecaoAtiva("menu"); }}
-              style={{ background: "none", border: "none", color: "#0f3460", cursor: "pointer", fontSize: 14, marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}
-            >
-              ← Voltar aos temas
-            </button>
-            <div style={{ background: tema.cor, color: "white", borderRadius: 16, padding: "20px 28px", marginBottom: 24 }}>
-              <div style={{ fontSize: 26, fontWeight: "bold" }}>{tema.titulo}</div>
-            </div>
-            {tema.conteudo.map((bloco, bi) => (
-              <div key={bi} style={{ background: "white", borderRadius: 14, padding: 24, marginBottom: 20, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", borderLeft: `5px solid ${tema.cor}` }}>
-                <div style={{ fontSize: 18, fontWeight: "bold", color: tema.cor, marginBottom: 12 }}>{bloco.subtitulo}</div>
-                <p style={{ color: "#444", marginBottom: 16, lineHeight: 1.7, fontSize: 14 }}>{bloco.texto}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 const modules = [
   {
     id: "investigacao",
@@ -651,7 +525,10 @@ function ModuleView({ mod, onBack }) {
           </div>
           <p style={{ color: "#64748b", fontSize: 12, textAlign: "center", marginTop: 16 }}>Clique no card para revelar a resposta</p>
         </div>
-
+      )}
+    </div>
+  );
+}
 
 function App() {
   const [view, setView] = useState("home");
@@ -665,7 +542,7 @@ function App() {
             <span style={{ color: "#4f9cff", fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase" }}>Fisiologia · Unichristus</span>
           </div>
           <h1 style={{ fontSize: 26, fontWeight: 900, color: "#e2e8f0", margin: "0 0 6px" }}>Sistema Gênito Urinário</h1>
-          <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>Profa. Dra. Leidiane Pinho · Guia interativo de estudos</p>
+          <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>SGU Parte 2 · Guia interativo de estudos</p>
         </div>
 
         {view !== "home" && (
@@ -740,4 +617,3 @@ root.render(<App />);
   </script>
 </body>
 </html>
-}
