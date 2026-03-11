@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGU - Parte 2</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+const { useState } = React;
+
+const TEMAS = [
+  {
+    id: "tema1",
+    titulo: "📌 Tema 1",
+    cor: "#0f4c75",
+    corClara: "#e8f4fd",
+    conteudo: [
+      {
+        subtitulo: "Em breve",
+        texto: "Adicione seu conteúdo aqui",
+        topicos: [],
+      },
+    ],
+  },
+];
+
+const QUESTOES = [];
+
+function App() {
+  const [temaAtivo, setTemaAtivo] = useState(null);
+  const [secaoAtiva, setSecaoAtiva] = useState("menu");
+
+  const tema = TEMAS.find((t) => t.id === temaAtivo);
+
+  return (
+    <div style={{ fontFamily: "'Georgia', serif", background: "#f8f6f0", minHeight: "100vh" }}>
+      {/* Header */}
+      <div style={{ background: "linear-gradient(135deg, #0f3460 0%, #16213e 100%)", color: "white", padding: "24px 32px", display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{ fontSize: 40 }}>🫘</div>
+        <div>
+          <div style={{ fontSize: 22, fontWeight: "bold", letterSpacing: 1 }}>Fisiologia do SGU - Parte 2</div>
+          <div style={{ fontSize: 13, opacity: 0.8 }}>Sistema Gênito Urinário — Conteúdo Complementar</div>
+        </div>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+          {["menu"].map((s) => (
+            <button
+              key={s}
+              onClick={() => { setSecaoAtiva(s); setTemaAtivo(null); }}
+              style={{
+                padding: "8px 18px",
+                borderRadius: 20,
+                border: "2px solid rgba(255,255,255,0.4)",
+                background: secaoAtiva === s ? "rgba(255,255,255,0.2)" : "transparent",
+                color: "white",
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: secaoAtiva === s ? "bold" : "normal",
+              }}
+            >
+              📚 Temas
+            </button>
+          ))}
+          <a
+            href="sgu.html"
+            style={{
+              padding: "8px 18px",
+              borderRadius: 20,
+              border: "2px solid rgba(255,255,255,0.4)",
+              background: "rgba(255,255,255,0.1)",
+              color: "white",
+              textDecoration: "none",
+              fontSize: 13,
+              display: "inline-flex",
+              alignItems: "center",
+            }}
+          >
+            ← SGU Parte 1
+          </a>
+          <a
+            href="../index.html"
+            style={{
+              padding: "8px 18px",
+              borderRadius: 20,
+              border: "2px solid rgba(255,255,255,0.4)",
+              background: "rgba(255,255,255,0.1)",
+              color: "white",
+              textDecoration: "none",
+              fontSize: 13,
+              display: "inline-flex",
+              alignItems: "center",
+            }}
+          >
+            ⬅ Hub
+          </a>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 16px" }}>
+
+        {/* MENU DE TEMAS */}
+        {secaoAtiva === "menu" && !temaAtivo && (
+          <div>
+            <div style={{ textAlign: "center", marginBottom: 28 }}>
+              <div style={{ fontSize: 15, color: "#555", marginBottom: 4 }}>Selecione um tema para estudar</div>
+              <div style={{ fontSize: 13, color: "#888" }}>Conteúdo complementar de SGU - Parte 2</div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16 }}>
+              {TEMAS.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => { setTemaAtivo(t.id); setSecaoAtiva("conteudo"); }}
+                  style={{
+                    background: "white",
+                    border: `3px solid ${t.cor}`,
+                    borderRadius: 14,
+                    padding: "20px 22px",
+                    textAlign: "left",
+                    cursor: "pointer",
+                    transition: "transform 0.15s, box-shadow 0.15s",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = `0 8px 24px ${t.cor}33`; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.07)"; }}
+                >
+                  <div style={{ fontSize: 18, fontWeight: "bold", color: t.cor }}>{t.titulo}</div>
+                </button>
+              ))}
+            </div>
+            <div style={{ background: "#fff3cd", border: "2px solid #ffc107", borderRadius: 12, padding: 16, marginTop: 20, textAlign: "center" }}>
+              <div style={{ fontWeight: "bold", color: "#856404", fontSize: 15 }}>💡 Em Preparação</div>
+              <div style={{ color: "#856404", fontSize: 13, marginTop: 4 }}>Envie seu conteúdo e ele será adicionado automaticamente aqui!</div>
+            </div>
+          </div>
+        )}
+
+        {/* CONTEÚDO DO TEMA */}
+        {secaoAtiva === "conteudo" && tema && (
+          <div>
+            <button
+              onClick={() => { setTemaAtivo(null); setSecaoAtiva("menu"); }}
+              style={{ background: "none", border: "none", color: "#0f3460", cursor: "pointer", fontSize: 14, marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}
+            >
+              ← Voltar aos temas
+            </button>
+            <div style={{ background: tema.cor, color: "white", borderRadius: 16, padding: "20px 28px", marginBottom: 24 }}>
+              <div style={{ fontSize: 26, fontWeight: "bold" }}>{tema.titulo}</div>
+            </div>
+            {tema.conteudo.map((bloco, bi) => (
+              <div key={bi} style={{ background: "white", borderRadius: 14, padding: 24, marginBottom: 20, boxShadow: "0 2px 12px rgba(0,0,0,0.07)", borderLeft: `5px solid ${tema.cor}` }}>
+                <div style={{ fontSize: 18, fontWeight: "bold", color: tema.cor, marginBottom: 12 }}>{bloco.subtitulo}</div>
+                <p style={{ color: "#444", marginBottom: 16, lineHeight: 1.7, fontSize: 14 }}>{bloco.texto}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+  </script>
+</body>
+</html>
+ import { useState } from "react";
+
+const modules = [
+  {
+    id: "investigacao",
+    icon: "🔬",
+    title: "Investigando o SGU",
+    color: "#4f9cff",
+    summary: `
+## Abordagem diagnóstica inicial
+
+1. **História médica detalhada** → fornece pistas sobre homeostase
+2. **Exame clínico minucioso** → foco em abdome e flancos
+3. **Sedimento urinário** → detecta características específicas de doença renal
+4. **Quantificação de glicose e proteína (urina 24h)** → avalia perda renal
+5. **TFG (Taxa de Filtração Glomerular)** → mede extensão e gravidade da doença renal
+
+## Parâmetros urinários de referência
+| Parâmetro | Valor normal |
+|---|---|
+| Bicarbonato | < 2 mmol/dia |
+| Cálcio (adulto) | 150–250 mg/dia |
+| Creatinina | 15–25 mg/kg/dia |
+| Excreção de amônio | 40–60 mmol/dia |
+| Hemácias | Ausente |
+| Leucócitos | < 10.000/mL |
+| pH | < 6,5 |
+| Proteínas | < 0,5 g/dia |
+
+⚠️ Atenção: esses parâmetros podem variar conforme contexto clínico!
+
+## Localização do problema
+- **Glomérulo** → Síndrome nefrítica, nefrótica, DRC
+- **Túbulos urinários** → IRA, Litíase renal, DRC
+- **Rim/ureteres/bexiga/uretra** → ITU
+    `,
+    flashcards: [
+      { q: "Quais são os 4 grandes gatilhos de doenças renais pela história médica?", a: "1. Microorganismos (bactérias → ITU; leucócitos → S. Nefrítica)\n2. Fármacos (antibióticos → IRA; cisplatina → DRC)\n3. Distúrbios hormonais (hiperparatireoidismo → Litíase Renal)\n4. Mutações genéticas (gene PKHD1 → Doença Renal Policística)" },
+      { q: "O que significa hematúria dismórfica e o que ela sugere?", a: "Hemácias com formato alterado/distorcido na urina → sugere SÍNDROME NEFRÍTICA (origem glomerular, pois as hemácias passam pela membrana basal)" },
+      { q: "Hematúria não-dismórfica está associada a qual condição?", a: "Litíase renal ou perfuração abdominal (as hemácias entram no trato urinário sem passar pelo filtro glomerular, mantendo sua forma)" },
+      { q: "Proteinúria > 3,5 g/dia indica qual síndrome?", a: "Síndrome Nefrótica — há lesão nos podócitos glomerulares, comprometendo a barreira de filtração seletiva" },
+    ],
+  },
+  {
+    id: "nefritica_nefrotica",
+    icon: "🫘",
+    title: "Síndrome Nefrítica vs Nefrótica",
+    color: "#a855f7",
+    summary: `
+## Síndrome Nefrítica
+**Estruturas comprometidas:** Membrana basal, Endotélio, Células mesangiais
+
+- Hematúria **dismórfica** (hemácias deformadas)
+- Proteinúria **leve** (< 3,5 g/dia)
+- Hipertensão
+- Edema moderado
+- Redução da TFG
+
+**Causa típica:** Inflamação glomerular (ex: pós-estreptocócica, lúpica)
+
+---
+
+## Síndrome Nefrótica
+**Estrutura comprometida:** Podócitos → Redução da espessura dos processos podais
+
+- Proteinúria **maciça** (> 3,5 g/dia)
+- Urina **espumosa** (proteína)
+- Hiperlipidemia e lipidúria
+- Edema intenso (hipoalbuminemia)
+- **Ausência** de hematúria dismórfica
+
+**Causa típica:** Lesões mínimas, glomeruloesclerose focal
+
+---
+
+## Resumo comparativo
+| | Nefrítica | Nefrótica |
+|---|---|---|
+| Hematúria dismórfica | Sim | Não |
+| Proteinúria | Leve | Maciça > 3,5g |
+| Hiperlipidemia | Não | Sim |
+| Estrutura lesada | MB + endotélio | Podócitos |
+    `,
+    flashcards: [
+      { q: "Qual a principal diferença entre hematúria dismórfica e proteinúria maciça?", a: "Hematúria dismórfica → S. Nefrítica (lesão endotélio/MB)\nProteinúria maciça >3,5g/dia → S. Nefrótica (lesão podócitos)" },
+      { q: "Por que a urina fica espumosa na síndrome nefrótica?", a: "A presença de grandes quantidades de proteína na urina reduz a tensão superficial, causando formação de espuma ao agitar a urina" },
+      { q: "Por que há hiperlipidemia na síndrome nefrótica?", a: "A perda de albumina plasmática estimula o fígado a produzir mais lipoproteínas como resposta compensatória, causando hiperlipidemia e lipidúria" },
+      { q: "Na síndrome nefrótica, qual síndrome tubular pode se associar?", a: "Síndrome de Fanconi — limitação da reabsorção de glicose e proteínas nos túbulos proximais, podendo associar-se à IRA" },
+    ],
+  },
+  {
+    id: "tfg",
+    icon: "📊",
+    title: "Avaliação da Função Renal — TFG",
+    color: "#14b8a6",
+    summary: `
+## Taxa de Filtração Glomerular (TFG)
+**Definição:** Soma da taxa de filtração de todos os néfrons funcionais — principal índice de função renal.
+
+---
+
+## Estágios da DRC pela TFG
+| Estágio | Gravidade | TFG (mL/min/1,73m²) |
+|---|---|---|
+| 1 | Nenhum ou leve | > 90 |
+| 2 | Brando | 60–89 |
+| 3 | Moderado | 30–59 |
+| 4 | Severo | 15–29 |
+| 5 | Próximo de falência | < 15 |
+
+---
+
+## Fórmula de Depuração (Clearance)
+
+**D = [Soluto]U × VU ÷ [Soluto]P**
+
+- D = Depuração do soluto (mL/min)
+- [Soluto]U = Concentração urinária do soluto
+- VU = Fluxo urinário (mL/min)
+- [Soluto]P = Concentração plasmática do soluto
+
+**Marcadores:**
+- **Inulina** — padrão-ouro, só filtrada, não reabsorvida nem secretada
+- **Creatinina** — uso clínico prático (produto do metabolismo muscular)
+
+---
+
+## Reguladores da TFG
+
+**Intrínsecos (autorregulação renal):**
+- Mecanismo miogênico
+- Retroalimentação tubuloglomerular
+
+**Extrínsecos:**
+- Nervos simpáticos, SRAA, Endotelina, Prostaglandinas, Óxido nítrico, Bradicinina
+    `,
+    flashcards: [
+      { q: "Calcule: VU = 6 mL/h, Creatinina U = 500 mg/dL, Creatinina P = 4 mg/dL. Qual o Dc?", a: "VU = 6/60 = 0,1 mL/min\nDc = (500 × 0,1) / 4 = 12,5 mL/min/1,73m²\n→ Paciente com rins em falência (estágio 5, < 15)" },
+      { q: "Por que a creatinina é usada como marcador de TFG?", a: "É produzida continuamente pelo músculo em taxa constante, é livremente filtrada pelo glomérulo e sofre mínima reabsorção tubular" },
+      { q: "O que é retroalimentação tubuloglomerular?", a: "A mácula densa detecta ↑ NaCl no túbulo distal → libera adenosina → vasoconstricção da arteríola aferente → ↓ TFG (autorregulação)" },
+      { q: "Como o SRAA regula a TFG em situação de hipoperfusão?", a: "↓ pressão renal → ↑ renina → ↑ Angiotensina II → vasoconstricção da arteríola EFERENTE → mantém pressão glomerular → preserva TFG" },
+    ],
+  },
+  {
+    id: "litiase",
+    icon: "🪨",
+    title: "Litíase Renal (LR)",
+    color: "#f59e0b",
+    summary: `
+## O que é?
+Formação de **cristais aglomerados** (cálculos) dentro das vias do trato urinário → obstrução tubular e prejuízo ao fluxo urinário.
+
+---
+
+## Composição dos cálculos
+- **Oxalato de Ca²⁺** → mais comum (~70%)
+- **Fosfato de Ca²⁺**
+- **Fosfato de amônio** (estruvita — associado a ITU)
+- Ácido úrico, cistina
+
+---
+
+## Fatores predisponentes
+- Baixa ingestão de água (urina concentrada)
+- **Hipercalciúria** (excesso de Ca²⁺ na urina)
+- **Hipocitratúria** (citrato é inibidor natural da cristalização)
+- Hiperparatireoidismo (↑ PTH → ↑ Ca²⁺ circulante)
+
+---
+
+## Mecanismos de proteção fisiológica
+1. **PTH + Calcitriol (Vit D):** mantêm Ca²⁺ circulante estável
+2. **THP/Uromodulina:** inibe cristalização na urina → evita cálculos
+
+---
+
+## Diagnóstico (sedimento urinário)
+- Cristais de fosfato/oxalato de Ca²⁺
+- Hematúria **não-dismórfica** (lesão mecânica)
+    `,
+    flashcards: [
+      { q: "Qual é o tipo mais comum de cálculo renal?", a: "Oxalato de cálcio (~70% dos casos). Forma cristais em urina concentrada com excesso de Ca²⁺ ou oxalato." },
+      { q: "Qual é a dupla função da proteína de Tamm-Horsfall?", a: "1. Inibe cristalização → previne litíase renal\n2. Adere às bactérias → facilita remoção pela urina → proteção contra ITU" },
+      { q: "Por que hiperparatireoidismo predispõe à litíase?", a: "↑ PTH → ↑ reabsorção óssea e intestinal de Ca²⁺ → hipercalcemia → hipercalciúria → precipitação de sais de Ca²⁺ na urina" },
+      { q: "Por que baixa ingestão de água predispõe a cálculos?", a: "Menor volume urinário → maior concentração de íons litogênicos → favorece supersaturação e precipitação cristalina" },
+    ],
+  },
+  {
+    id: "ira",
+    icon: "⚡",
+    title: "Insuficiência Renal Aguda (IRA)",
+    color: "#ef4444",
+    summary: `
+## O que é?
+Redução **súbita e reversível** da capacidade do rim de excretar e equilibrar fluidos e eletrólitos.
+**Duração: dias a poucos meses**
+
+---
+
+## Causas
+- **Isquemia** (↓ fluxo sanguíneo renal)
+- **Drogas nefrotóxicas** endo/exógenas (aminoglicosídeos, cisplatina, AINEs)
+- **Sepse**
+- **Insuficiência cardíaca congestiva**
+
+---
+
+## Sequência da lesão tubular aguda
+↓ Suprimento sanguíneo → Lesão isquêmica → Acúmulo de metabólitos tóxicos → ↑ Espécies reativas de O₂ → Resposta inflamatória → Fibrose
+
+---
+
+## Autorregulação na IRA (mecanismos de defesa)
+1. **Reflexo de distensão miogênico** — vasodilatação da arteríola aferente
+2. **Retroalimentação túbulo-glomerular** — ajuste via mácula densa
+3. **↑ Angiotensina II local** — vasoconstricção eferente → mantém pressão glomerular
+
+---
+
+## Critérios diagnósticos
+- Débito urinário **< 0,5 mL/kg/h por > 6 horas**
+- ↑ creatinina sérica ≥ 0,3 mg/dL em 48h
+    `,
+    flashcards: [
+      { q: "Qual a diferença temporal entre IRA e DRC?", a: "IRA: dias a poucos meses (reversível)\nDRC: anormalidade persistente por 3 meses ou mais (geralmente irreversível)" },
+      { q: "Quais são os 3 mecanismos de autorregulação renal na IRA?", a: "1. Mecanismo miogênico (distensão da arteríola aferente)\n2. Retroalimentação tubuloglomerular (mácula densa)\n3. ↑ Angiotensina II local (vasoconstricção eferente)" },
+      { q: "Por que aminoglicosídeos causam IRA?", a: "Ficam presos nas células do túbulo proximal → acúmulo intracelular → lesão tubular aguda (necrose tubular aguda) → ↓ TFG" },
+      { q: "Débito urinário < 0,5 mL/kg/h por mais de 6 horas é critério para qual diagnóstico?", a: "Insuficiência Renal Aguda (IRA) — critério KDIGO de oligúria" },
+    ],
+  },
+  {
+    id: "drc",
+    icon: "🔄",
+    title: "Doença Renal Crônica (DRC)",
+    color: "#4f9cff",
+    summary: `
+## O que é?
+**Anormalidade estrutural e/ou funcional persistente por 3 meses ou mais**, independentemente da causa.
+
+---
+
+## Causas mais comuns
+1. **Nefropatia diabética** → glicação de proteínas da membrana basal glomerular
+2. **Hipertensão arterial** → esclerose vascular renal
+3. **Glomerulopatias** → lesão glomerular progressiva
+
+---
+
+## Fisiopatologia — ciclo vicioso
+1. **Dano celular** (parada do ciclo celular, apoptose endotelial)
+2. **Mediadores pró-inflamatórios** (infiltração de células inflamatórias)
+3. **Fatores pró-fibróticos** (expansão da matriz extracelular)
+4. **Fibrose renal** (rarefação de capilares)
+
+---
+
+## Como o rim compensa (se lesão for lenta)?
+- Mecanismos de regulação extra e intrarrenal
+- **Tampões fisiológicos** (bicarbonato, fosfato, amônia)
+- Hipertrofia compensatória dos néfrons remanescentes
+
+---
+
+## Complicações da DRC
+- Anemia (↓ eritropoetina)
+- Doença mineral óssea (↓ calcitriol)
+- Acidose metabólica, hipercalemia, hipertensão
+    `,
+    flashcards: [
+      { q: "Qual o critério temporal que diferencia DRC de IRA?", a: "DRC: anormalidade presente por ≥ 3 meses\nIRA: abrupta, dura dias a meses" },
+      { q: "Quais são as 3 principais causas de DRC?", a: "1. Nefropatia diabética (mais comum)\n2. Hipertensão arterial\n3. Glomerulopatias" },
+      { q: "Por que pacientes com DRC desenvolvem anemia?", a: "O rim produz eritropoetina (EPO). Na DRC, os néfrons funcionais são perdidos → ↓ EPO → ↓ produção de hemácias → anemia normocrômica norrocítica" },
+      { q: "Qual é o ciclo vicioso da fibrose renal na DRC?", a: "Dano celular → mediadores pró-inflamatórios → fatores pró-fibróticos → remodelamento matriz extracelular → fibrose → mais perda de néfrons → mais dano" },
+    ],
+  },
+  {
+    id: "itu",
+    icon: "🦠",
+    title: "Infecções do Trato Urinário (ITU)",
+    color: "#22c55e",
+    summary: `
+## O que é?
+Infecções bacterianas limitadas à **bexiga (cistite)** ou envolvendo todo o trato até o **tecido perinéfrico (pielonefrite)**.
+
+---
+
+## Fatores predisponentes
+- Desnutrição, Diabetes melito
+- Obstrução urinária
+- Anormalidades anatômicas do SGU
+- Corpos estranhos (cateteres de demora)
+- Imunossupressão (drogas, câncer, HIV)
+
+---
+
+## Como as bactérias atacam
+1. **Aderência** na parede da via urinária via **pili (fímbrias)**
+2. **Produção de toxinas** (hemolisina → lesão epitelial → hemorragia)
+3. **Invasão** da parede da bexiga após lesão epitelial
+4. **Sequestro de Fe²⁺** (nutriente essencial para proliferação bacteriana)
+
+---
+
+## Mecanismos de defesa do organismo
+| Mecanismo | Ação |
+|---|---|
+| Glicocálice epitelial | Resistência à aderência bacteriana |
+| Descamação epitelial aumentada | Remove bactérias junto com células |
+| IgA secretora | Barreira à ascensão bacteriana |
+| THP/Uromodulina | Adere às bactérias e facilita remoção |
+
+---
+
+## Achados urinários
+- Hematúria (não dismórfica), Leucocitúria > 10.000/mL, Bacteriúria
+    `,
+    flashcards: [
+      { q: "Quais são os 4 passos do mecanismo bacteriano na ITU?", a: "1. Aderência via pili\n2. Produção de toxinas (hemolisina) → lesão epitelial\n3. Invasão da parede vesical\n4. Sequestro de Fe²⁺ para proliferação" },
+      { q: "Qual a função do glicocálice na proteção contra ITU?", a: "Reveste o epitélio da bexiga criando resistência à aderência bacteriana — impede as fímbrias bacterianas de se fixarem" },
+      { q: "Por que diabetes mellito predispõe à ITU?", a: "A glicosúria fornece substrato nutritivo para bactérias. Além disso, a hiperglicemia compromete a fagocitose leucocitária" },
+      { q: "Qual proteína faz tanto proteção contra litíase quanto contra ITU?", a: "Proteína de Tamm-Horsfall (THP/Uromodulina):\n- Litíase: inibe cristalização\n- ITU: adere às bactérias → remove pela urina" },
+    ],
+  },
+];
+
+const quizQuestions = [
+  { q: "Paciente com proteinúria > 3,5 g/dia, edema intenso e hiperlipidemia. Qual síndrome?", options: ["Síndrome Nefrítica", "Síndrome Nefrótica", "IRA", "ITU"], answer: 1, explanation: "A tríade proteinúria maciça + hiperlipidemia + edema grave = Síndrome Nefrótica. A lesão nos podócitos compromete a barreira de filtração seletiva." },
+  { q: "Hematúria dismórfica no sedimento urinário sugere principalmente:", options: ["Litíase renal", "Síndrome Nefrótica", "Síndrome Nefrítica", "ITU"], answer: 2, explanation: "Hemácias dismórficas são deformadas ao atravessar a membrana basal glomerular lesada → Síndrome Nefrítica. Hematúria não-dismórfica sugere litíase." },
+  { q: "VU = 1 mL/min, [Creatinina]U = 200 mg/dL, [Creatinina]P = 2 mg/dL. Qual o clearance?", options: ["100 mL/min", "50 mL/min", "25 mL/min", "10 mL/min"], answer: 0, explanation: "Dc = (200 × 1) / 2 = 100 mL/min → TFG normal (> 90). Estágio 1 — rins saudáveis." },
+  { q: "Qual proteína tem dupla função: proteção contra litíase E contra ITU?", options: ["Albumina", "PTH", "Proteína de Tamm-Horsfall (THP)", "IgA secretora"], answer: 2, explanation: "THP/Uromodulina: (1) inibe cristalização → previne cálculos; (2) adere às bactérias → facilita eliminação pela urina." },
+  { q: "Anormalidade renal estrutural persistente por 3 meses ou mais define:", options: ["IRA", "DRC", "Litíase renal", "Síndrome Nefrótica"], answer: 1, explanation: "Critério temporal: ≥ 3 meses = DRC. IRA dura dias a meses e é potencialmente reversível." },
+  { q: "Na IRA, qual mecanismo usa a mácula densa para autorregulação?", options: ["Mecanismo miogênico", "Retroalimentação tubuloglomerular", "SRAA", "Endotelina"], answer: 1, explanation: "A mácula densa detecta variações de NaCl no túbulo distal e sinaliza para as arteríolas ajustarem a TFG — retroalimentação tubuloglomerular." },
+  { q: "M.G.N., 65 anos, proteinúria maciça, urina espumosa, hiperlipidemia. Item CORRETO:", options: ["I: Síndrome nefrítica é o diagnóstico mais provável", "II: Urina espumosa se deve à perda de proteínas", "IV: THP é o principal evento fisiológico regulador", "I e IV estão corretos"], answer: 1, explanation: "Item II correto: a proteinúria maciça reduz a tensão superficial → espuma. O diagnóstico é Síndrome NEFRÓTICA (não nefrítica). Estrutura comprometida: podócitos." },
+  { q: "Na sepse, qual sequência fisiopatológica ocorre na IRA intrínseca?", options: ["Fibrose → Inflamação → Isquemia", "↓ sangue → Isquemia → Metabólitos tóxicos → ↑ ROS", "↑ TFG → Proteinúria → DRC", "Cristalização → Obstrução → ITU"], answer: 1, explanation: "Na IRA: ↓ suprimento sanguíneo → lesão isquêmica → acúmulo de metabólitos tóxicos → ↑ espécies reativas de O₂ → resposta inflamatória → lesão tubular." },
+  { q: "TFG de 20 mL/min/1,73m² corresponde a qual estágio de DRC?", options: ["Estágio 2 (brando)", "Estágio 3 (moderado)", "Estágio 4 (severo)", "Estágio 5 (falência)"], answer: 2, explanation: "Estágio 4 = TFG 15–29 mL/min/1,73m². 20 está nessa faixa — rins insuficientes." },
+  { q: "Bactérias utilizam pili na ITU para:", options: ["Produzir toxinas hemolíticas", "Sequestrar ferro (Fe²⁺)", "Aderir à parede do trato urinário", "Invadir o parênquima renal"], answer: 2, explanation: "Pili (fímbrias) são estruturas de aderência — primeiro passo da patogênese da ITU. Sem aderência, as bactérias seriam lavadas pelo fluxo urinário." },
+];
+
+function renderMarkdown(text) {
+  const lines = text.split("\n");
+  const elements = [];
+  let tableBuffer = [];
+  let inTable = false;
+
+  const flushTable = (key) => {
+    if (tableBuffer.length < 2) { tableBuffer = []; return; }
+    const headers = tableBuffer[0].split("|").filter(c => c.trim()).map(c => c.trim());
+    const rows = tableBuffer.slice(2).map(r => r.split("|").filter(c => c.trim()).map(c => c.trim()));
+    elements.push(
+      <div key={key} style={{ overflowX: "auto", margin: "12px 0" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+          <thead><tr>{headers.map((h, i) => <th key={i} style={{ padding: "8px 12px", background: "#1e2334", color: "#4f9cff", borderBottom: "1px solid #252a38", textAlign: "left" }}>{h}</th>)}</tr></thead>
+          <tbody>{rows.map((row, ri) => (<tr key={ri} style={{ background: ri % 2 ? "#181c27" : "#1a1f2e" }}>{row.map((cell, ci) => <td key={ci} style={{ padding: "7px 12px", borderBottom: "1px solid #252a38", color: "#e2e8f0", fontSize: 13 }}>{cell}</td>)}</tr>))}</tbody>
+        </table>
+      </div>
+    );
+    tableBuffer = [];
+  };
+
+  lines.forEach((line, i) => {
+    if (line.startsWith("|")) { inTable = true; tableBuffer.push(line); return; }
+    else if (inTable) { flushTable(`table-${i}`); inTable = false; }
+
+    if (line.startsWith("## ")) {
+      elements.push(<h2 key={i} style={{ color: "#4f9cff", fontSize: 15, fontWeight: 700, margin: "18px 0 8px", borderBottom: "1px solid #252a38", paddingBottom: 4 }}>{line.slice(3)}</h2>);
+    } else if (line.startsWith("---")) {
+      elements.push(<hr key={i} style={{ border: "none", borderTop: "1px solid #252a38", margin: "14px 0" }} />);
+    } else if (line.match(/^\d+\.\s/)) {
+      const content = line.replace(/\*\*(.*?)\*\*/g, "<strong style='color:#fff'>$1</strong>");
+      elements.push(<p key={i} style={{ margin: "4px 0 4px 16px", color: "#e2e8f0", fontSize: 14 }} dangerouslySetInnerHTML={{ __html: content }} />);
+    } else if (line.startsWith("- ") || line.startsWith("* ")) {
+      const content = line.slice(2).replace(/\*\*(.*?)\*\*/g, "<strong style='color:#fff'>$1</strong>");
+      elements.push(<p key={i} style={{ margin: "3px 0 3px 12px", color: "#e2e8f0", fontSize: 14 }} dangerouslySetInnerHTML={{ __html: `• ${content}` }} />);
+    } else if (line.trim() === "") {
+      elements.push(<div key={i} style={{ height: 5 }} />);
+    } else {
+      const content = line.replace(/\*\*(.*?)\*\*/g, "<strong style='color:#fff'>$1</strong>");
+      if (line.startsWith("⚠️")) {
+        elements.push(<div key={i} style={{ background: "#2a1f0a", border: "1px solid #f59e0b44", borderRadius: 8, padding: "10px 14px", margin: "8px 0" }}><p style={{ color: "#f59e0b", fontSize: 14, margin: 0 }} dangerouslySetInnerHTML={{ __html: content }} /></div>);
+      } else {
+        elements.push(<p key={i} style={{ margin: "4px 0", color: "#e2e8f0", fontSize: 14, lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: content }} />);
+      }
+    }
+  });
+  if (inTable) flushTable("table-last");
+  return elements;
+}
+
+function Flashcard({ card }) {
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <div onClick={() => setFlipped(!flipped)} style={{ cursor: "pointer" }}>
+      <div style={{ background: flipped ? "#0d2a0d" : "#1a1f2e", border: `1px solid ${flipped ? "#22c55e55" : "#252a38"}`, borderRadius: 12, padding: "20px", minHeight: 130, transition: "all 0.3s ease", position: "relative" }}>
+        <div style={{ position: "absolute", top: 10, right: 14, fontSize: 11, color: "#64748b" }}>{flipped ? "✅ Resposta" : "❓ Clique para revelar"}</div>
+        <p style={{ color: flipped ? "#22c55e" : "#e2e8f0", fontSize: 14, lineHeight: 1.7, margin: 0, whiteSpace: "pre-line", marginTop: 12 }}>{flipped ? card.a : card.q}</p>
+      </div>
+    </div>
+  );
+}
+
+function QuizSection() {
+  const [currentQ, setCurrentQ] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [score, setScore] = useState(0);
+  const [done, setDone] = useState(false);
+  const [answers, setAnswers] = useState([]);
+  const q = quizQuestions[currentQ];
+
+  const handleSelect = (idx) => {
+    if (selected !== null) return;
+    setSelected(idx);
+    if (idx === q.answer) setScore(s => s + 1);
+    setAnswers(a => [...a, { correct: idx === q.answer }]);
+  };
+
+  const next = () => {
+    if (currentQ + 1 >= quizQuestions.length) setDone(true);
+    else { setCurrentQ(c => c + 1); setSelected(null); }
+  };
+
+  const reset = () => { setCurrentQ(0); setSelected(null); setScore(0); setDone(false); setAnswers([]); };
+
+  if (done) {
+    const pct = Math.round((score / quizQuestions.length) * 100);
+    return (
+      <div style={{ textAlign: "center", padding: 32 }}>
+        <div style={{ fontSize: 60 }}>{pct >= 80 ? "🏆" : pct >= 60 ? "📚" : "💪"}</div>
+        <h2 style={{ color: "#e2e8f0", fontSize: 28, fontWeight: 800, margin: "16px 0 8px" }}>{score}/{quizQuestions.length}</h2>
+        <p style={{ color: pct >= 80 ? "#22c55e" : pct >= 60 ? "#f59e0b" : "#ef4444", fontSize: 18, fontWeight: 700, margin: "8px 0 24px" }}>
+          {pct >= 80 ? "Excelente! Domínio do conteúdo!" : pct >= 60 ? "Bom! Revise os erros." : "Continue estudando!"}
+        </p>
+        <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 24 }}>
+          {answers.map((a, i) => (
+            <div key={i} style={{ width: 36, height: 36, borderRadius: 8, background: a.correct ? "#22c55e22" : "#ef444422", border: `1px solid ${a.correct ? "#22c55e" : "#ef4444"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>
+              {a.correct ? "✓" : "✗"}
+            </div>
+          ))}
+        </div>
+        <button onClick={reset} style={{ background: "#4f9cff", color: "#fff", border: "none", borderRadius: 10, padding: "12px 32px", cursor: "pointer", fontSize: 15, fontWeight: 700 }}>Tentar novamente</button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12, alignItems: "center" }}>
+        <span style={{ color: "#64748b", fontSize: 13 }}>Questão {currentQ + 1} de {quizQuestions.length}</span>
+        <span style={{ color: "#4f9cff", fontSize: 13, fontWeight: 700 }}>✓ {score} acertos</span>
+      </div>
+      <div style={{ height: 4, background: "#252a38", borderRadius: 4, marginBottom: 24 }}>
+        <div style={{ height: 4, background: "#4f9cff", borderRadius: 4, width: `${(currentQ / quizQuestions.length) * 100}%`, transition: "width 0.4s" }} />
+      </div>
+      <p style={{ color: "#e2e8f0", fontSize: 16, fontWeight: 600, lineHeight: 1.6, marginBottom: 20 }}>{q.q}</p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {q.options.map((opt, idx) => {
+          let bg = "#181c27", border = "#252a38", color = "#e2e8f0";
+          if (selected !== null) {
+            if (idx === q.answer) { bg = "#0d2a0d"; border = "#22c55e"; color = "#22c55e"; }
+            else if (idx === selected) { bg = "#2a0d0d"; border = "#ef4444"; color = "#ef4444"; }
+          }
+          return (
+            <div key={idx} onClick={() => handleSelect(idx)} style={{ background: bg, border: `1px solid ${border}`, borderRadius: 10, padding: "14px 16px", cursor: selected === null ? "pointer" : "default", color, fontSize: 14, transition: "all 0.2s" }}>
+              <span style={{ opacity: 0.5, marginRight: 8 }}>{String.fromCharCode(65 + idx)})</span>{opt}
+            </div>
+          );
+        })}
+      </div>
+      {selected !== null && (
+        <div style={{ background: "#1e2334", border: "1px solid #252a38", borderRadius: 10, padding: "14px 16px", marginTop: 16 }}>
+          <p style={{ color: "#64748b", fontSize: 11, marginBottom: 6, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>💡 Explicação</p>
+          <p style={{ color: "#e2e8f0", fontSize: 14, lineHeight: 1.6, margin: 0 }}>{q.explanation}</p>
+        </div>
+      )}
+      {selected !== null && (
+        <button onClick={next} style={{ width: "100%", marginTop: 16, background: "#4f9cff", color: "#fff", border: "none", borderRadius: 10, padding: "14px", cursor: "pointer", fontSize: 15, fontWeight: 700 }}>
+          {currentQ + 1 >= quizQuestions.length ? "Ver resultado →" : "Próxima questão →"}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function ModuleView({ mod, onBack }) {
+  const [tab, setTab] = useState("resumo");
+  const [fcIdx, setFcIdx] = useState(0);
+  return (
+    <div>
+      <button onClick={onBack} style={{ background: "none", border: "none", color: "#64748b", cursor: "pointer", fontSize: 14, marginBottom: 20, padding: 0 }}>← Voltar</button>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+        <div style={{ fontSize: 32 }}>{mod.icon}</div>
+        <h2 style={{ color: mod.color, fontSize: 20, fontWeight: 800, margin: 0 }}>{mod.title}</h2>
+      </div>
+      <div style={{ display: "flex", gap: 4, marginBottom: 20, background: "#181c27", borderRadius: 10, padding: 4 }}>
+        {[["resumo", "📖 Resumo"], ["flashcards", "🃏 Flashcards"]].map(([key, label]) => (
+          <button key={key} onClick={() => setTab(key)} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "none", cursor: "pointer", background: tab === key ? mod.color : "transparent", color: tab === key ? "#000" : "#64748b", fontWeight: 700, fontSize: 13, transition: "all 0.2s" }}>{label}</button>
+        ))}
+      </div>
+      {tab === "resumo" && <div style={{ background: "#181c27", border: "1px solid #252a38", borderRadius: 12, padding: 24 }}>{renderMarkdown(mod.summary)}</div>}
+      {tab === "flashcards" && (
+        <div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+            <span style={{ color: "#64748b", fontSize: 13 }}>Card {fcIdx + 1} de {mod.flashcards.length}</span>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={() => setFcIdx(i => Math.max(0, i - 1))} disabled={fcIdx === 0} style={{ background: "#252a38", border: "none", color: "#e2e8f0", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}>‹</button>
+              <button onClick={() => setFcIdx(i => Math.min(mod.flashcards.length - 1, i + 1))} disabled={fcIdx === mod.flashcards.length - 1} style={{ background: "#252a38", border: "none", color: "#e2e8f0", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}>›</button>
+            </div>
+          </div>
+          <Flashcard card={mod.flashcards[fcIdx]} key={fcIdx} />
+          <div style={{ display: "flex", gap: 6, marginTop: 12, justifyContent: "center" }}>
+            {mod.flashcards.map((_, i) => <div key={i} onClick={() => setFcIdx(i)} style={{ width: 8, height: 8, borderRadius: "50%", background: i === fcIdx ? mod.color : "#252a38", cursor: "pointer" }} />)}
+          </div>
+          <p style={{ color: "#64748b", fontSize: 12, textAlign: "center", marginTop: 16 }}>Clique no card para revelar a resposta</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function App() {
+  const [view, setView] = useState("home");
+  const [activeModule, setActiveModule] = useState(null);
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#0f1117", fontFamily: "'Segoe UI', system-ui, sans-serif", color: "#e2e8f0" }}>
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "24px 16px" }}>
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <div style={{ display: "inline-block", background: "#1a1f2e", borderRadius: 12, padding: "5px 16px", marginBottom: 10 }}>
+            <span style={{ color: "#4f9cff", fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase" }}>Fisiologia · Unichristus</span>
+          </div>
+          <h1 style={{ fontSize: 26, fontWeight: 900, color: "#e2e8f0", margin: "0 0 6px" }}>Sistema Gênito Urinário</h1>
+          <p style={{ color: "#64748b", fontSize: 13, margin: 0 }}>Profa. Dra. Leidiane Pinho · Guia interativo de estudos</p>
+        </div>
+
+        {view !== "home" && (
+          <button onClick={() => { setView("home"); setActiveModule(null); }} style={{ background: "#181c27", border: "1px solid #252a38", color: "#64748b", borderRadius: 10, padding: "8px 16px", cursor: "pointer", fontSize: 13, marginBottom: 20 }}>← Início</button>
+        )}
+
+        {view === "home" && (
+          <div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 24 }}>
+              {[["7", "Módulos"], ["28", "Flashcards"], ["10", "Questões"]].map(([n, l]) => (
+                <div key={l} style={{ background: "#181c27", border: "1px solid #252a38", borderRadius: 12, padding: "16px", textAlign: "center" }}>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: "#4f9cff" }}>{n}</div>
+                  <div style={{ fontSize: 12, color: "#64748b" }}>{l}</div>
+                </div>
+              ))}
+            </div>
+
+            <p style={{ color: "#64748b", fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Módulos de Estudo</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: 10, marginBottom: 24 }}>
+              {modules.map(mod => (
+                <div key={mod.id} onClick={() => { setActiveModule(mod); setView("module"); }} style={{ background: "#181c27", border: "1px solid #252a38", borderRadius: 14, padding: "18px 16px", cursor: "pointer", transition: "all 0.2s", borderLeft: `3px solid ${mod.color}` }}>
+                  <div style={{ fontSize: 26, marginBottom: 8 }}>{mod.icon}</div>
+                  <div style={{ color: mod.color, fontSize: 13, fontWeight: 700 }}>{mod.title}</div>
+                  <div style={{ color: "#64748b", fontSize: 11, marginTop: 4 }}>{mod.flashcards.length} flashcards</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ background: "linear-gradient(135deg, #1a2035, #1a1f2e)", border: "1px solid #4f9cff33", borderRadius: 16, padding: "24px", textAlign: "center", marginBottom: 20 }}>
+              <div style={{ fontSize: 40, marginBottom: 8 }}>🧠</div>
+              <h3 style={{ color: "#e2e8f0", fontWeight: 800, margin: "0 0 6px", fontSize: 18 }}>Quiz Final</h3>
+              <p style={{ color: "#64748b", fontSize: 13, marginBottom: 18 }}>10 questões cobrindo todo o conteúdo do SGU</p>
+              <button onClick={() => setView("quiz")} style={{ background: "#4f9cff", color: "#fff", border: "none", borderRadius: 10, padding: "12px 32px", cursor: "pointer", fontSize: 15, fontWeight: 800 }}>Iniciar Quiz →</button>
+            </div>
+
+            <div style={{ background: "#181c27", border: "1px solid #252a38", borderRadius: 14, padding: 20 }}>
+              <h3 style={{ color: "#e2e8f0", fontSize: 14, fontWeight: 800, margin: "0 0 14px" }}>🗺️ Mapa Diagnóstico Rápido</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                {[
+                  { label: "Hematúria dismórfica", dx: "S. Nefrítica", color: "#a855f7" },
+                  { label: "Proteinúria > 3,5g/dia", dx: "S. Nefrótica", color: "#a855f7" },
+                  { label: "Débito urinário < 0,5 mL/kg/h", dx: "IRA", color: "#ef4444" },
+                  { label: "Cristais no sedimento + cólica", dx: "Litíase Renal", color: "#f59e0b" },
+                  { label: "Leucocitúria + bacteriúria", dx: "ITU", color: "#22c55e" },
+                  { label: "TFG < 60 por ≥ 3 meses", dx: "DRC", color: "#4f9cff" },
+                ].map(item => (
+                  <div key={item.label} style={{ background: "#1a1f2e", borderRadius: 8, padding: "10px 12px", borderLeft: `3px solid ${item.color}` }}>
+                    <div style={{ color: "#64748b", fontSize: 11 }}>{item.label}</div>
+                    <div style={{ color: item.color, fontSize: 13, fontWeight: 700 }}>→ {item.dx}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {view === "module" && activeModule && <ModuleView mod={activeModule} onBack={() => setView("home")} />}
+        {view === "quiz" && (
+          <div style={{ background: "#181c27", border: "1px solid #252a38", borderRadius: 16, padding: 28 }}>
+            <h2 style={{ color: "#e2e8f0", fontSize: 18, fontWeight: 800, margin: "0 0 20px" }}>🧠 Quiz — SGU Completo</h2>
+            <QuizSection />
+          </div>
+        )}
+        <p style={{ textAlign: "center", color: "#252a38", fontSize: 11, marginTop: 28 }}>Baseado nos slides da Profa. Dra. Leidiane Pinho · Unichristus 2023</p>
+      </div>
+    </div>
+  );
+}
