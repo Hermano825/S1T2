@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcards SGU</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #0369a1;
+      --bg: #f0f9ff;
+      --card-bg: #ffffff;
+      --text-dark: #0f172a;
+      --text-light: #64748b;
+      --border: #e0f2fe;
+      --success: #166534;
+      --warning: #b45309;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 16px rgba(3, 105, 161, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .header-left {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .header-icon {
+      font-size: 40px;
+    }
+
+    .header-info h1 {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .header-info p {
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 20px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-weight: bold;
+      font-size: 20px;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0284c7;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--border);
+      color: var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: #cffafe;
+    }
+
+    .flashcard-area {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 40px 32px;
+      box-shadow: 0 8px 32px rgba(3, 105, 161, 0.12);
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      opacity: 0.3;
+    }
+
+    .empty-state-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .empty-state-desc {
+      color: var(--text-light);
+      font-size: 14px;
+      max-width: 400px;
+    }
+
+    .note {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 12px;
+      padding: 14px;
+      color: #92400e;
+      font-size: 13px;
+      margin-top: 20px;
+    }
+
+    .footer-nav {
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .footer-nav a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+    }
+
+    .footer-nav a:hover {
+      gap: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .header-stats {
+        justify-content: center;
+      }
+
+      .flashcard-area {
+        min-height: 300px;
+        padding: 20px;
+      }
+
+      .header-icon {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <div class="header-icon">🫘</div>
+        <div class="header-info">
+          <h1>SGU - Flashcards</h1>
+          <p>Nefrologia e Sistema Gênito Urinário</p>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Revisados</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary">Começar Revisão</button>
+      <button class="btn btn-secondary">Embaralhar</button>
+      <a href="index.html" class="btn btn-secondary">← Voltar</a>
+    </div>
+
+    <div class="flashcard-area">
+      <div class="empty-state">
+        <div class="empty-state-icon">🎴</div>
+        <div class="empty-state-title">Flashcards em Preparação</div>
+        <div class="empty-state-desc">
+          Os flashcards do SGU serão adicionados em breve. Você pode enviar os conteúdos e eles aparecerão aqui automaticamente.
+        </div>
+        <div class="note">
+          💡 Dica: Flashcards serão exibidos em modo flip (frente/verso) para memorização interativa.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-nav">
+      <a href="index.html">← Painel de Flashcards</a>
+      <a href="../index.html">← Hub Principal →</a>
+    </div>
+  </div>
+</body>
+</html>

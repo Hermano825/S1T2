@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hub de Estudos Med</title>
+  <title>Flashcards - Estudos</title>
   <style>
     :root {
       --bg: #f4f1ea;
@@ -38,7 +38,7 @@
       margin: 44px auto;
     }
 
-    .hero {
+    .header {
       background: var(--paper);
       border: 1px solid var(--line);
       border-radius: 22px;
@@ -46,45 +46,47 @@
       box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -50px;
-      top: -50px;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(194,65,12,0.14), rgba(3,105,161,0.14));
+    .header-icon {
+      font-size: 48px;
     }
 
-    .kicker {
-      display: inline-block;
-      font-size: 12px;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: var(--accent-2);
-      margin-bottom: 12px;
+    .header-content h1 {
+      font-size: 32px;
+      margin-bottom: 4px;
     }
 
-    h1 {
-      font-size: clamp(28px, 5vw, 42px);
-      line-height: 1.08;
-      margin-bottom: 10px;
-      max-width: 760px;
-    }
-
-    .hero p {
+    .header-content p {
       color: var(--muted);
-      font-size: 16px;
-      max-width: 720px;
-      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    .back-link {
+      margin-top: 16px;
+      display: inline-block;
+    }
+
+    .back-link a {
+      text-decoration: none;
+      color: var(--accent-2);
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+    }
+
+    .back-link a:hover {
+      gap: 10px;
     }
 
     .panel {
-      margin-top: 26px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 18px;
@@ -107,8 +109,7 @@
       box-shadow: 0 14px 28px rgba(31, 41, 55, 0.12);
     }
 
-    .card.arritmia { background: var(--card-2); }
-    .card.nefro { background: var(--card-1); }
+    .card.sgu { background: var(--card-2); border-left: 4px solid var(--accent-2); }
 
     .badge {
       display: inline-block;
@@ -118,10 +119,9 @@
       padding: 6px 10px;
       margin-bottom: 12px;
       letter-spacing: .6px;
+      background: rgba(3, 105, 161, .12);
+      color: var(--accent-2);
     }
-
-    .arritmia .badge { background: rgba(3,105,161,.12); color: var(--accent-2); }
-    .nefro .badge { background: rgba(194,65,12,.12); color: var(--accent-1); }
 
     .card h2 {
       font-size: 22px;
@@ -143,52 +143,46 @@
     }
 
     .footer {
-      margin-top: 18px;
       text-align: center;
       color: #6b7280;
       font-size: 13px;
-      padding-bottom: 30px;
+      padding: 30px 0;
+      margin-top: 40px;
+      border-top: 1px solid var(--line);
     }
 
     @media (max-width: 640px) {
-      .hero { padding: 24px; }
+      .header { padding: 24px; }
       .container { margin: 22px auto; }
       .card h2 { font-size: 20px; }
+      .header-icon { font-size: 36px; }
     }
   </style>
 </head>
 <body>
   <main class="container">
-    <section class="hero">
-      <span class="kicker">Painel principal</span>
-      <h1>Hub de estudos para acesso rapido aos modulos</h1>
-      <p>Use este painel para navegar entre os conteudos. O modulo de Arritmias ja esta pronto e o modulo de Nefro (SGU) esta preparado para voce completar com seu HTML.</p>
-    </section>
+    <div class="header">
+      <div class="header-icon">🎴</div>
+      <div class="header-content">
+        <h1>Flashcards - Prova</h1>
+        <p>Revisão rápida com cartões interativos para memorização eficiente</p>
+      </div>
+    </div>
 
-    <section class="panel" aria-label="Painel de modulos">
-      <a class="card arritmia" href="arritimias.html">
-        <span class="badge">Cardiologia</span>
-        <h2>Arritmias no ECG</h2>
-        <p>Acesso direto ao conteudo completo de arritmias cardiacas com teoria, tabela e quiz.</p>
-        <span class="cta">Abrir modulo -></span>
-      </a>
-
-      <a class="card nefro" href="sgu.html">
+    <section class="panel" aria-label="Painel de temas">
+      <a class="card sgu" href="sgu.html">
         <span class="badge">Nefrologia</span>
-        <h2>Nefro (SGU)</h2>
-        <p>Painel pronto para receber o novo material de SGU. Voce pode substituir o conteudo depois.</p>
-        <span class="cta">Abrir modulo -></span>
-      </a>
-
-      <a class="card nefro" href="flashcards/index.html">
-        <span class="badge">Revisao</span>
-        <h2>Flashcards</h2>
-        <p>Cartoes interativos para memorizar conteudo de forma rapida e eficiente.</p>
-        <span class="cta">Abrir flashcards -></span>
+        <h2>SGU - Flashcards</h2>
+        <p>Cartões de revisão para o módulo de Sistema Gênito Urinário.</p>
+        <span class="cta">Abrir flashcards →</span>
       </a>
     </section>
+
+    <div class="back-link">
+      <a href="../index.html">← Voltar ao Hub Principal</a>
+    </div>
   </main>
 
-  <div class="footer">Hub local de estudos medicos</div>
+  <div class="footer">Flashcards para revisão rápida</div>
 </body>
 </html>
